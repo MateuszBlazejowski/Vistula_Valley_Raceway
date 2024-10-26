@@ -1,0 +1,27 @@
+inspo:
+f1 manager
+
+concept
+two areas 
+1.track
+-choose driving mode(eco,normal,push)
+-race other drivers(npc)
+-
+2.pitbox
+-change tyres
+-add fuel
+-change driver
+-fix cars(take resources from teams pitbox and place on the car)
+pre race
+-change car aero settings
+-change engine components
+
+Later add 3rd area
+3.facility
+-upgrade car
+
+Later add 4th area
+4.paddock
+-interview for popularity or money 
+
+
