@@ -22,12 +22,10 @@ namespace VVR.Visuals
   
 
         public ImageGenerating()
-        {
+        {}
 
-        }
-
-        public List<TrackPiece> trackPieces = new List<TrackPiece>();
-        public List<Vehicle> vehicles = new List<Vehicle>();
+        private List<TrackPiece> trackPieces = new List<TrackPiece>();
+        private List<Vehicle> vehicles = new List<Vehicle>();
         public void GenerateFixedTrack() //for now track is fixed, but in future it is possible to write a function that will generate random track 
         {
             trackPieces.Clear();
@@ -61,7 +59,7 @@ namespace VVR.Visuals
             trackPieces.Add(new TrackPiece(0, 50, '|', '|')); // the track is very short but sufficient for testing //FOR FURTHER DEVELOPMENT 
         }
 
-        public char[,] RenderTrackFrame(int startingRow)
+        private char[,] RenderTrackFrame(int startingRow)
         {
             char[,] toReturn = new char[GlobalConstants.MAXTRACKWIDTH, GlobalConstants.TRACKFRAMELENGTH];
             for (int i = 0; i < GlobalConstants.MAXTRACKWIDTH; i++)
@@ -74,25 +72,44 @@ namespace VVR.Visuals
 
             for (int i = 0; i < GlobalConstants.TRACKFRAMELENGTH; i++)
             {
-                toReturn[((startingRow + i) % trackPieces.Count), i] = ' ';
+                toReturn[trackPieces[((startingRow + i) % trackPieces.Count)].leftBorder, i] = trackPieces[((startingRow + i) % trackPieces.Count)].leftBorderSign;
+                toReturn[trackPieces[((startingRow + i) % trackPieces.Count)].rightBorder, i] = trackPieces[((startingRow + i) % trackPieces.Count)].rightBorderSign;
                 //trackPieces[((startingRow+i)%trackPieces.Count)
             }
             return toReturn; 
-        }   
+        }
+        private void PrintFrame(char[,] frame)
+        {
+            Console.CursorVisible = false; // disable winking from the cursor running around the console
+
+            for (int j = 0; j < GlobalConstants.TRACKFRAMELENGTH; j++) // Loop through rows (frame height)
+            {
+                Console.SetCursorPosition(0, j); // Move cursor to the start of each row
+                for (int i = 0; i < GlobalConstants.MAXTRACKWIDTH; i++) // Loop through columns (frame width)
+                {
+                    Console.Write(frame[i, j]); // Write characters in place
+                }
+            }
+            Console.CursorVisible = true;
+        }
+
         public void Play()
         {
-            int startingRow = 0; 
+            int startingRow = trackPieces.Count; 
             char[,] frame = new char[GlobalConstants.MAXTRACKWIDTH, GlobalConstants.TRACKFRAMELENGTH];
             while (true)
             {
                 frame = RenderTrackFrame(startingRow); 
 
-                // later add objects to the track like cars etc 
-                startingRow++;
-                startingRow = startingRow % trackPieces.Count;
 
+                // later add objects to the track like cars etc 
+                PrintFrame(frame);
+                startingRow--;
+                if(startingRow<0)startingRow = trackPieces.Count;
+
+                Thread.Sleep(250);  //later depending on your speed  
+               
                 //stop condition, some event like pressing the esc button 
-                Thread.Sleep(500);  //later depending on your speed  
             }
             //will independently generate all visuals, respond to events which will change the the values of some things, that will influence display 
             // 
