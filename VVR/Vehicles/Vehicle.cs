@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VVR.Vehicles.VehicleComponents;
 
 namespace VVR.Vehicles
 {
-    internal abstract class Vehicles
+    internal abstract class Vehicle
     {
-        float hp;
-        float maxFuel;
         float mass;
-        float torque;
-        float currentFuel;
+        Engine engine;
+        Frame frame;
+        Tyres tyresFront;
+        Tyres tyresBack;
     }
 }
