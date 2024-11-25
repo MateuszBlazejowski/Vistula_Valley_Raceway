@@ -20,5 +20,6 @@ namespace VVR.Vehicles.VehicleComponents
         float balance;
         float handling;
         float frameWeight;
+        FrameType type;
     }
 }
