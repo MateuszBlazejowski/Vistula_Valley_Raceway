@@ -63,7 +63,7 @@ namespace VVR.Vehicles.VehicleComponents
             //6cyl 2l size = 2/6 *100 = 33.3
             if (config == Configuration.V)
             {
-                size = (displacement / cylinderAmmount) * GlobalConsts.VENGINEMASSBIAS * GlobalConsts.ENGINESIZINGCONST;
+                size = (displacement / cylinderAmmount) * GlobalConsts.VENGINEMASSBIAS * GlobalConsts.ENGINESIZINGCONST;     
 
             }
             else//conf is flat or inline

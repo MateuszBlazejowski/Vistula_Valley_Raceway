@@ -5,13 +5,8 @@ using System.Linq;
 using System.Text;
 //using System.Threading;
 using System.Threading.Tasks;
-using VVR.Vehicles; 
-
-public static class GlobalConstants
-{
-    public const int MAXTRACKWIDTH = 100;
-    public const int TRACKFRAMELENGTH = 15;
-}
+using VVR.Vehicles;
+using VVR.Technical;
 
 namespace VVR.Visuals
 {
@@ -61,16 +56,16 @@ namespace VVR.Visuals
 
         private char[,] RenderTrackFrame(int startingRow)
         {
-            char[,] toReturn = new char[GlobalConstants.MAXTRACKWIDTH, GlobalConstants.TRACKFRAMELENGTH];
-            for (int i = 0; i < GlobalConstants.MAXTRACKWIDTH; i++)
+            char[,] toReturn = new char[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH];   
+            for (int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++)
             {
-                for (int j = 0; j < GlobalConstants.TRACKFRAMELENGTH; j++)
+                for (int j = 0; j < GlobalConsts.TRACKFRAMELENGTH; j++)
                 {
                     toReturn[i, j] = ' ';
                 }
             }
 
-            for (int i = 0; i < GlobalConstants.TRACKFRAMELENGTH; i++)
+            for (int i = 0; i < GlobalConsts.TRACKFRAMELENGTH; i++)
             {
                 toReturn[trackPieces[((startingRow + i) % trackPieces.Count)].leftBorder, i] = trackPieces[((startingRow + i) % trackPieces.Count)].leftBorderSign;
                 toReturn[trackPieces[((startingRow + i) % trackPieces.Count)].rightBorder, i] = trackPieces[((startingRow + i) % trackPieces.Count)].rightBorderSign;
@@ -82,10 +77,10 @@ namespace VVR.Visuals
         {
             Console.CursorVisible = false; // disable winking from the cursor running around the console
 
-            for (int j = 0; j < GlobalConstants.TRACKFRAMELENGTH; j++) // Loop through rows (frame height)
+            for (int j = 0; j < GlobalConsts.TRACKFRAMELENGTH; j++) // Loop through rows (frame height)
             {
                 Console.SetCursorPosition(0, j); // Move cursor to the start of each row
-                for (int i = 0; i < GlobalConstants.MAXTRACKWIDTH; i++) // Loop through columns (frame width)
+                for (int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++) // Loop through columns (frame width)
                 {
                     Console.Write(frame[i, j]); // Write characters in place
                 }
@@ -96,7 +91,7 @@ namespace VVR.Visuals
         public void Play()
         {
             int startingRow = trackPieces.Count; 
-            char[,] frame = new char[GlobalConstants.MAXTRACKWIDTH, GlobalConstants.TRACKFRAMELENGTH];
+            char[,] frame = new char[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH];
             while (true)
             {
                 frame = RenderTrackFrame(startingRow); 
