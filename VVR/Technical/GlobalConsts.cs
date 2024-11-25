@@ -6,10 +6,24 @@ using System.Threading.Tasks;
 
 namespace VVR.Technical
 {
-    public static class GlobalConstants
+    public static class GlobalConsts
     {
-        const float VENGINEMASSBIAS = 0.8f;
-        const float ENGINESIZINGCONST = 100.0f;
-        const float FORCEDINDUCTIONMASS = 20.0f;
+        public const float VENGINEMASSBIAS = 1.2f;
+        public const float VENGINESIZEBIAS = 0.8f;
+        public const float ENGINESIZINGCONST = 100.0f;
+        public const float ENGINEWEIGHTCONST = 100.0f;
+        public const float FORCEDINDUCTIONMASSTC = 10.0f;
+        public const float FORCEDINDUCTIONMASSSC = 20.0f;
+        public const float FORCEDINDUCTIONSIZE = 10.0f;
+        public const float HORSEPOWERMULTIPLIER = 15.0f;
+        public const float TORQMULTIPLIER = 125.0f;
+        public const float TURBOBONUS = 100.0f;
+        public const float TURBOBONUSTORQ = 70.0f;
+        public const float SUPERCHARGERBONUS= 70.0f;
+        public const float SUPERCHARGERBONUSTORQ= 100.0f;
+        public const float FLATRELIABILITYDEBUF= 10.0f;
+        public const float FORCEDINDUCTIONDEBUF= 10.0f;
+        public const float FUELCONSUMPTIONCONST= 10.0f;
+        public const float FORCEDINDUCTIONFUELCONSUMPTION= 5.0f;
     }
 }

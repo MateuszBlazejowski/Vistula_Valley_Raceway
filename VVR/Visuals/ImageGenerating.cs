@@ -6,10 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VVR.Vehicles; 
 
-public static class GlobalConstants
-{
-    public const int MaxTrackWidth = 100;
-}
+
 
 namespace VVR.Visuals
 {
