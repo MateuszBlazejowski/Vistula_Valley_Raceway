@@ -100,8 +100,6 @@ namespace VVR.Visuals
             while (true)
             {
                 frame = RenderTrackFrame(startingRow); 
-
-
                 // later add objects to the track like cars etc 
                 PrintFrame(frame);
                 startingRow--;
