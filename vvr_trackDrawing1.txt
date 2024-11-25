@@ -1,0 +1,14 @@
+|				|
+|				|
+\			^	\
+ \				 \
+  \		^		  \
+   |				   |
+   |				   |
+  /	^			  /
+ /				 /
+|				|
+|		    ^		|
+
+
+//racing car within track limits
