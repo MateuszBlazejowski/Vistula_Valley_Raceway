@@ -33,58 +33,58 @@ namespace VVR.Vehicles.VehicleComponents
         //can be changed to be vertical and horizontal size
         float size
         {
-            get => size;
-            set => size = value;
+            get;
+            set;
         }
 
         //max speed
         float horsePower
         {
-            get => horsePower;
-            set => horsePower = value;
+            get;
+            set;
         }
 
         //acceleration
         float torque
         {
-            get => torque;
-            set => torque = value;
+            get;
+            set;
         }
 
         float reliability
         {
-            get => reliability;
-            set => reliability = value;
+            get;
+            set;
         }
 
         float fuelconsumption
         {
-            get => fuelconsumption;
-            set => fuelconsumption = value;
+            get;
+            set;
         }
         public float engineWeight
         {
-            get => engineWeight;
-            set => engineWeight = value;
+            get;
+            set;
         }
 
 
 
-        float CalculateSize(int cylamm, float disp, Configuration conf, EngineType t)
+        float CalculateSize()
         {
             //example 4 cyl 2l vs 6cyl 2l
             //4cyl 2l size = (2/4 +4) * 100 = 450
             //6cyl 2l size = (2/6 +6)*100 = 633.3
             //16cyl 8l size = (8/16 +16)*100 = 1650
-            float size = 0;
+            float size = 0.0f;
             if (config == Configuration.V)
             {
-                size = (disp / cylamm + cylamm)* GlobalConsts.VENGINESIZEBIAS * GlobalConsts.ENGINESIZINGCONST;
+                size = (displacement / cylinderAmmount + cylinderAmmount) * GlobalConsts.VENGINESIZEBIAS * GlobalConsts.ENGINESIZINGCONST;
 
             }
             else//conf is flat or inline
             {
-                size = (disp / cylamm +cylamm)* GlobalConsts.ENGINESIZINGCONST;
+                size = (displacement / cylinderAmmount + cylinderAmmount) * GlobalConsts.ENGINESIZINGCONST;
             }
             if (type == EngineType.Supercharged || type == EngineType.Turbocharged)
             {
@@ -93,20 +93,20 @@ namespace VVR.Vehicles.VehicleComponents
             return size;
         }
 
-        float CalculateWeight(int cylamm, float disp, Configuration conf, EngineType t)
+        float CalculateWeight()
         {
             //example 4 cyl 2l vs 6cyl 2l
             //4cyl 2l weight = (4/2)* 100 = 200
             //6cyl 2l weight = 6/2 *100 = 300
-            float weight = 0;
+            float weight = 0.0f;
             if (config == Configuration.V)
             {
-                weight = (cylinderAmmount / displacement) * GlobalConsts.VENGINEMASSBIAS * GlobalConsts.ENGINEWEIGHTCONST;
+                weight = (cylinderAmmount / displacement +displacement) * GlobalConsts.VENGINEMASSBIAS * GlobalConsts.ENGINEWEIGHTCONST;
 
             }
             else//conf is flat or inline
             {
-                weight = (cylinderAmmount / displacement) * GlobalConsts.ENGINEWEIGHTCONST;
+                weight = (cylinderAmmount / displacement +displacement) * GlobalConsts.ENGINEWEIGHTCONST;
             }
             if (type == EngineType.Supercharged)
             {
@@ -116,12 +116,12 @@ namespace VVR.Vehicles.VehicleComponents
             {
                 weight += GlobalConsts.FORCEDINDUCTIONMASSTC;
             }
-            return size;
+            return weight;
         }
 
-        float CalculateHorsePower(int cylamm, float disp, Configuration conf, EngineType t)
+        float CalculateHorsePower()
         {
-            float hp = 0;
+            float hp = 0.0f;
             hp = (cylinderAmmount * displacement) * GlobalConsts.HORSEPOWERMULTIPLIER;
             if (type == EngineType.Turbocharged)
             {
@@ -134,9 +134,9 @@ namespace VVR.Vehicles.VehicleComponents
             return hp;
         }
 
-        float CalculateTorque(int cylamm, float disp, Configuration conf, EngineType t)
+        float CalculateTorque()
         {
-            float torq = 0;
+            float torq = 0.0f;
             torq = displacement * GlobalConsts.TORQMULTIPLIER;
             if (type == EngineType.Turbocharged)
             {
@@ -149,15 +149,15 @@ namespace VVR.Vehicles.VehicleComponents
             return torq;
         }
 
-        float CalculateReliability(int cylamm, float disp, Configuration conf, EngineType t)
+        float CalculateReliability()
         {
             float reliability = 100.0f;
 
-            if (conf == Configuration.Flat)
+            if (config == Configuration.Flat)
             {
                 reliability -= GlobalConsts.FLATRELIABILITYDEBUF;
             }
-            if (t == EngineType.Supercharged || t == EngineType.Turbocharged)
+            if (type == EngineType.Supercharged || type == EngineType.Turbocharged)
             {
                 reliability -= GlobalConsts.FORCEDINDUCTIONDEBUF;
             }
@@ -165,13 +165,13 @@ namespace VVR.Vehicles.VehicleComponents
             return reliability;
         }
 
-        float CalculateFuelConsumption(int cylamm, float disp, Configuration conf, EngineType t)
+        float CalculateFuelConsumption()
         {
             float fuelconsumption = 0;
 
             fuelconsumption += Math.Min(40.0f, displacement * GlobalConsts.FUELCONSUMPTIONCONST);
 
-            if (t == EngineType.Supercharged || t == EngineType.Turbocharged)
+            if (type == EngineType.Supercharged || type == EngineType.Turbocharged)
             {
                 fuelconsumption += GlobalConsts.FORCEDINDUCTIONFUELCONSUMPTION;
             }
@@ -185,12 +185,23 @@ namespace VVR.Vehicles.VehicleComponents
             displacement = disp;
             config = conf;
             type = t;
-            size = CalculateSize(cylamm, disp, conf, t);
-            engineWeight = CalculateWeight(cylamm, disp, conf, t);
-            horsePower = CalculateHorsePower(cylamm, disp, conf, t);
-            torque = CalculateTorque(cylamm, disp, conf, t);
-            reliability = CalculateReliability(cylamm, disp, conf, t);
-            fuelconsumption = CalculateFuelConsumption(cylamm, disp, conf, t);
+            size = CalculateSize();
+            engineWeight = CalculateWeight();
+            horsePower = CalculateHorsePower();
+            torque = CalculateTorque();
+            reliability = CalculateReliability();
+            fuelconsumption = CalculateFuelConsumption();
+        }
+
+        public void PrintEngineStats()
+        {
+            Console.WriteLine($"Engine is: {Enum.GetName(typeof(Configuration), config)},\n" +
+                $"inudction is: {type.ToString()},\n" +
+                $"the cylinder ammount is: {cylinderAmmount},\n" +
+                $"the displacement is {displacement},\n" +
+                $"the size is {size} and weight {engineWeight}\n" +
+                $"the horsepower {horsePower} and torque {torque}\n" +
+                $"the reliability {reliability} and fuel consumption {fuelconsumption}\n");
         }
     }
 }
