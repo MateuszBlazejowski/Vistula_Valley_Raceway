@@ -11,7 +11,7 @@ namespace VVR.Vehicles.VehicleComponents
     enum Configuration
     {
         Inline,//+++reliability
-        Flat,//+++Balance ---reliability
+        Flat,//+++bonus to handling -reliability
         V,//each cylinder in this config brings up the size less than in other configs but is heavier
     }
     enum EngineType
@@ -22,8 +22,8 @@ namespace VVR.Vehicles.VehicleComponents
     }
     internal class Engine
     {
-        int cylinderAmmount;//^ = +hp +torque +fuelcons +size -reliability 
-        float displacement;//^ = +hp +torque +fuelcons +size
+        int cylinderAmmount;//^ = +hp +fuelcons +size +weight -reliability 
+        float displacement;//^ = +hp +torque +fuelcons +size +weight
         //same displacement but with more cylinders takes up less space but is heavier
         Configuration config;
         EngineType type;
@@ -36,34 +36,49 @@ namespace VVR.Vehicles.VehicleComponents
             get => size;
             set => size = value;
         }
-        float horsePower; //max speed
-        float torque; //acceleration
-        float reliability;
-        float balance;// gives bonus to handling
-        float fuelconsumption;
-        float engineWeight;
 
-
-
-        void CalculateParameters()
+        //max speed
+        float horsePower
         {
+            get => horsePower;
+            set => horsePower = value;
+        }
 
+        //acceleration
+        float torque
+        {
+            get => torque;
+            set => torque = value;
+        }
+
+        float reliability
+        {
+            get => reliability;
+            set => reliability = value;
+        }
+
+        float fuelconsumption
+        {
+            get => fuelconsumption;
+            set => fuelconsumption = value;
+        }
+        public float engineWeight
+        {
+            get => engineWeight;
+            set => engineWeight = value;
         }
 
 
 
-        Engine(int cylamm, float disp, Configuration conf = Configuration.Inline, EngineType t = EngineType.NaturallyAspirated)
+        float CalculateSize(int cylamm, float disp, Configuration conf, EngineType t)
         {
-            cylinderAmmount = cylamm;
-            displacement = disp;
-            config = conf;
-            type = t;
             //example 4 cyl 2l vs 6cyl 2l
             //4cyl 2l size = 2/4 * 100 = 50
             //6cyl 2l size = 2/6 *100 = 33.3
+            float size = 0;
             if (config == Configuration.V)
             {
-                size = (displacement / cylinderAmmount) * GlobalConsts.VENGINEMASSBIAS * GlobalConsts.ENGINESIZINGCONST;     
+                size = (displacement / cylinderAmmount) * GlobalConsts.VENGINESIZEBIAS * GlobalConsts.ENGINESIZINGCONST;
 
             }
             else//conf is flat or inline
@@ -72,8 +87,109 @@ namespace VVR.Vehicles.VehicleComponents
             }
             if (type == EngineType.Supercharged || type == EngineType.Turbocharged)
             {
-                size += GlobalConsts.FORCEDINDUCTIONMASS;
+                size += GlobalConsts.FORCEDINDUCTIONSIZE;
             }
+            return size;
+        }
+
+        float CalculateWeight(int cylamm, float disp, Configuration conf, EngineType t)
+        {
+            //example 4 cyl 2l vs 6cyl 2l
+            //4cyl 2l weight = 4/2 * 100 = 200
+            //6cyl 2l weight = 6/2 *100 = 300
+            float weight = 0;
+            if (config == Configuration.V)
+            {
+                weight = (cylinderAmmount / displacement) * GlobalConsts.VENGINEMASSBIAS * GlobalConsts.ENGINEWEIGHTCONST;
+
+            }
+            else//conf is flat or inline
+            {
+                weight = (cylinderAmmount / displacement) * GlobalConsts.ENGINEWEIGHTCONST;
+            }
+            if (type == EngineType.Supercharged)
+            {
+                weight += GlobalConsts.FORCEDINDUCTIONMASSSC;
+            }
+            else if (type == EngineType.Turbocharged)
+            {
+                weight += GlobalConsts.FORCEDINDUCTIONMASSTC;
+            }
+            return size;
+        }
+
+        float CalculateHorsePower(int cylamm, float disp, Configuration conf, EngineType t)
+        {
+            float hp = 0;
+            hp = (cylinderAmmount * displacement) * GlobalConsts.HORSEPOWERMULTIPLIER;
+            if (type == EngineType.Turbocharged)
+            {
+                hp += GlobalConsts.TURBOBONUS;
+            }
+            else if (type == EngineType.Supercharged)
+            {
+                hp += GlobalConsts.SUPERCHARGERBONUS;
+            }
+            return hp;
+        }
+
+        float CalculateTorque(int cylamm, float disp, Configuration conf, EngineType t)
+        {
+            float torq = 0;
+            torq = displacement * GlobalConsts.TORQMULTIPLIER;
+            if (type == EngineType.Turbocharged)
+            {
+                torq += GlobalConsts.TURBOBONUSTORQ;
+            }
+            else if (type == EngineType.Supercharged)
+            {
+                torq += GlobalConsts.SUPERCHARGERBONUSTORQ;
+            }
+            return torq;
+        }
+
+        float CalculateReliability(int cylamm, float disp, Configuration conf, EngineType t)
+        {
+            float reliability = 100.0f;
+
+            if (conf == Configuration.Flat)
+            {
+                reliability -= GlobalConsts.FLATRELIABILITYDEBUF;
+            }
+            if (t == EngineType.Supercharged || t == EngineType.Turbocharged)
+            {
+                reliability -= GlobalConsts.FORCEDINDUCTIONDEBUF;
+            }
+            reliability -= cylinderAmmount;
+            return reliability;
+        }
+
+        float CalculateFuelConsumption(int cylamm, float disp, Configuration conf, EngineType t)
+        {
+            float fuelconsumption = 0;
+
+            fuelconsumption += Math.Min(40.0f, displacement * GlobalConsts.FUELCONSUMPTIONCONST);
+
+            if (t == EngineType.Supercharged || t == EngineType.Turbocharged)
+            {
+                fuelconsumption += GlobalConsts.FORCEDINDUCTIONFUELCONSUMPTION;
+            }
+
+            return fuelconsumption;
+        }
+
+        public Engine(int cylamm, float disp, Configuration conf = Configuration.Inline, EngineType t = EngineType.NaturallyAspirated)
+        {
+            cylinderAmmount = cylamm;
+            displacement = disp;
+            config = conf;
+            type = t;
+            size = CalculateSize(cylamm, disp, conf, t);
+            engineWeight = CalculateWeight(cylamm, disp, conf, t);
+            horsePower = CalculateHorsePower(cylamm, disp, conf, t);
+            torque = CalculateTorque(cylamm, disp, conf, t);
+            reliability = CalculateReliability(cylamm, disp, conf, t);
+            fuelconsumption = CalculateFuelConsumption(cylamm, disp, conf, t);
         }
     }
 }

@@ -14,5 +14,14 @@ namespace VVR.Vehicles
         Frame frame;
         Tyres tyresFront;
         Tyres tyresBack;
+
+        public Vehicle(Engine _eng, Frame _frame, Tyres _tyresfront, Tyres _tyresBack)
+        {
+            engine = _eng;
+            frame = _frame;
+            tyresFront = _tyresfront;
+            tyresBack = _tyresBack;
+            mass = engine.engineWeight;//+frame.weight
+        }
     }
 }
