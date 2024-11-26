@@ -73,17 +73,18 @@ namespace VVR.Vehicles.VehicleComponents
         float CalculateSize(int cylamm, float disp, Configuration conf, EngineType t)
         {
             //example 4 cyl 2l vs 6cyl 2l
-            //4cyl 2l size = 2/4 * 100 = 50
-            //6cyl 2l size = 2/6 *100 = 33.3
+            //4cyl 2l size = (2/4 +4) * 100 = 450
+            //6cyl 2l size = (2/6 +6)*100 = 633.3
+            //16cyl 8l size = (8/16 +16)*100 = 1650
             float size = 0;
             if (config == Configuration.V)
             {
-                size = (displacement / cylinderAmmount) * GlobalConsts.VENGINESIZEBIAS * GlobalConsts.ENGINESIZINGCONST;
+                size = (disp / cylamm + cylamm)* GlobalConsts.VENGINESIZEBIAS * GlobalConsts.ENGINESIZINGCONST;
 
             }
             else//conf is flat or inline
             {
-                size = displacement / cylinderAmmount * GlobalConsts.ENGINESIZINGCONST;
+                size = (disp / cylamm +cylamm)* GlobalConsts.ENGINESIZINGCONST;
             }
             if (type == EngineType.Supercharged || type == EngineType.Turbocharged)
             {
@@ -95,7 +96,7 @@ namespace VVR.Vehicles.VehicleComponents
         float CalculateWeight(int cylamm, float disp, Configuration conf, EngineType t)
         {
             //example 4 cyl 2l vs 6cyl 2l
-            //4cyl 2l weight = 4/2 * 100 = 200
+            //4cyl 2l weight = (4/2)* 100 = 200
             //6cyl 2l weight = 6/2 *100 = 300
             float weight = 0;
             if (config == Configuration.V)

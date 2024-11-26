@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VVR.Technical;
 
 namespace VVR.Vehicles.VehicleComponents
 {
@@ -16,10 +17,24 @@ namespace VVR.Vehicles.VehicleComponents
     {
         float fuelTankSize;
         float currentFuel;
-        float aerodynamics;
-        float balance;
-        float handling;
-        float frameWeight;
-        FrameType type;
+        public float frameWeight;
+        float maxEnigneSize;
+        //float handling;
+        //FrameType type; to be implemented later
+
+        public float CalculateFrameWeight(float _maxEngineSize)
+        {
+            float weight = 0.0f;
+
+            weight += _maxEngineSize* GlobalConsts.FRAMEWEIGHTCONST;
+
+            return weight;
+        }
+        public Frame(float _maxEngineSize,float _fuelTankSize=GlobalConsts.DEFAULTFUELTANK, float _currentFuel= GlobalConsts.DEFAULTFUELTANK)
+        {
+            maxEnigneSize = _maxEngineSize;
+            frameWeight =CalculateFrameWeight(maxEnigneSize);
+        }
+
     }
 }
