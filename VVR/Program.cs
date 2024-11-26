@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 ﻿using VVR.Vehicles.VehicleComponents;
-=======
-﻿using VVR.Locations;
->>>>>>> Mateuszb1
+using VVR.Locations;
 using VVR.Visuals;
 
 namespace VVR
@@ -33,15 +30,10 @@ namespace VVR
 
             Thread.Sleep(2000);
             ImageGenerating imageGenerating = new ImageGenerating();
-<<<<<<< HEAD
             //imageGenerating.GenerateFixedTrack();
-            //imageGenerating.Play();
+            imageGenerating.Play();
             Engine eng = new Engine(4, 2.7f, Configuration.Flat, EngineType.Turbocharged);
             eng.PrintEngineStats();
-=======
-            
-            imageGenerating.Play();
->>>>>>> Mateuszb1
         }
     }
 }

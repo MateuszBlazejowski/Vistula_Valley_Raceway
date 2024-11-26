@@ -27,12 +27,8 @@ namespace VVR.Technical
         public const float FORCEDINDUCTIONFUELCONSUMPTION= 1.0f;
         public const float FORCEDINDUCTIONMASS = 20.0f;
         public const int MAXTRACKWIDTH = 100;
-<<<<<<< HEAD
-        public const int TRACKFRAMELENGTH = 15;
+        public const int TRACKFRAMELENGTH = 16;
         public const float DEFAULTFUELTANK = 60.0f;
         public const float FRAMEWEIGHTCONST = 0.25f;
-=======
-        public const int TRACKFRAMELENGTH = 16;
->>>>>>> Mateuszb1
     }
 }
