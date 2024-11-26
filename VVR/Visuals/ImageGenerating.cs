@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VVR.Vehicles;
 using VVR.Technical;
+using VVR.Locations;
 
 namespace VVR.Visuals
 {
@@ -14,46 +15,15 @@ namespace VVR.Visuals
     {
         //will store all cars in a container independetnly to logic, that will allow to generate everything separately
         //events will modify cars properties like speed, position(turning left and right on track) etc, which will influence visuals 
-  
 
-        public ImageGenerating()
-        {}
+        public Track track = new Track();
 
-        private List<TrackPiece> trackPieces = new List<TrackPiece>();
         private List<Vehicle> vehicles = new List<Vehicle>();
-        public void GenerateFixedTrack() //for now track is fixed, but in future it is possible to write a function that will generate random track 
+        public ImageGenerating()
         {
-            trackPieces.Clear();
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '\\', '\\'));// when assigning \ the other sign \ is neccesary to ommit the special meaning of char \
-            trackPieces.Add(new TrackPiece(1, 51, '\\', '\\'));
-            trackPieces.Add(new TrackPiece(2, 52, '|', '|'));
-            trackPieces.Add(new TrackPiece(2, 52, '|', '|'));
-            trackPieces.Add(new TrackPiece(2, 52, '|', '|'));
-            trackPieces.Add(new TrackPiece(2, 52, '|', '|'));
-            trackPieces.Add(new TrackPiece(2, 52, '|', '|'));
-            trackPieces.Add(new TrackPiece(2, 52, '|', '|'));
-            trackPieces.Add(new TrackPiece(1, 51, '/', '/'));
-            trackPieces.Add(new TrackPiece(1, 51, '|', '|'));
-            trackPieces.Add(new TrackPiece(1, 51, '|', '|'));
-            trackPieces.Add(new TrackPiece(1, 51, '|', '|'));
-            trackPieces.Add(new TrackPiece(1, 51, '|', '|'));
-            trackPieces.Add(new TrackPiece(1, 51, '|', '|'));
-            trackPieces.Add(new TrackPiece(1, 51, '/', '/'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|')); // the track is very short but sufficient for testing //FOR FURTHER DEVELOPMENT 
+            track.GenerateFixedTrack();
         }
-
+        
         private char[,] RenderTrackFrame(int startingRow)
         {
             char[,] toReturn = new char[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH];   
@@ -67,11 +37,20 @@ namespace VVR.Visuals
 
             for (int i = 0; i < GlobalConsts.TRACKFRAMELENGTH; i++)
             {
-                toReturn[trackPieces[((startingRow + i) % trackPieces.Count)].leftBorder, i] = trackPieces[((startingRow + i) % trackPieces.Count)].leftBorderSign;
-                toReturn[trackPieces[((startingRow + i) % trackPieces.Count)].rightBorder, i] = trackPieces[((startingRow + i) % trackPieces.Count)].rightBorderSign;
+                toReturn[track.trackPieces[((startingRow + i) % track.trackPieces.Count)].leftBorder, i] = track.trackPieces[((startingRow + i) % track.trackPieces.Count)].leftBorderSign;
+                toReturn[track.trackPieces[((startingRow + i) % track.trackPieces.Count)].rightBorder, i] = track.trackPieces[((startingRow + i) % track.trackPieces.Count)].rightBorderSign;
                 //trackPieces[((startingRow+i)%trackPieces.Count)
             }
             return toReturn; 
+        }
+        private void RenderCar(char[,] frame, int posX, int posY)// no parameters for now, but in future add position and car to find colors properties 
+        {
+            frame[posX - 1, posY -1] = '\'';
+            frame[posX, posY -1] = '█'; //later use ▄ and set bacground to another color in order to create an impression of the front of the car 
+            frame[posX + 1, posY - 1] = '\'';
+            frame[posX - 1, posY] = '\'';
+            frame[posX, posY] = '▀';
+            frame[posX + 1, posY] = '\'';
         }
         private void PrintFrame(char[,] frame)
         {
@@ -79,26 +58,34 @@ namespace VVR.Visuals
 
             for (int j = 0; j < GlobalConsts.TRACKFRAMELENGTH; j++) // Loop through rows (frame height)
             {
+                // if (j % 2 == 0) Console.ForegroundColor = ConsoleColor.Red;
+                //else Console.ForegroundColor = ConsoleColor.White; // COLORING will be addded later and stored in the  Tuple<ConsoleColor, ConsoleColor>[,] colors 
                 Console.SetCursorPosition(0, j); // Move cursor to the start of each row
                 for (int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++) // Loop through columns (frame width)
                 {
                     Console.Write(frame[i, j]); // Write characters in place
                 }
+
             }
+            
             Console.CursorVisible = true;
         }
-
         public void Play()
         {
-            int startingRow = trackPieces.Count; 
+            int startingRow = track.trackPieces.Count; 
             char[,] frame = new char[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH];
             while (true)
             {
-                frame = RenderTrackFrame(startingRow); 
+                frame = RenderTrackFrame(startingRow);
+
+                int carPosX = 25;
+                int carPosY = GlobalConsts.TRACKFRAMELENGTH / 2;   // later all of this will be stored in the array of vehicles 
+
+                RenderCar(frame, carPosX, carPosY);// will be in a loop that generates all cars
                 // later add objects to the track like cars etc 
                 PrintFrame(frame);
                 startingRow--;
-                if(startingRow<0)startingRow = trackPieces.Count;
+                if(startingRow<0)startingRow = track.trackPieces.Count;
 
                 Thread.Sleep(250);  //later depending on your speed  
                
