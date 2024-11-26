@@ -12,6 +12,6 @@ namespace VVR.Technical
         public const float ENGINESIZINGCONST = 100.0f;
         public const float FORCEDINDUCTIONMASS = 20.0f;
         public const int MAXTRACKWIDTH = 100;
-        public const int TRACKFRAMELENGTH = 15;
+        public const int TRACKFRAMELENGTH = 16;
     }
 }

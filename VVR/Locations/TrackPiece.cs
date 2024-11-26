@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VVR.Visuals {
+namespace VVR.Locations
+{
     internal class TrackPiece //one row piece of track 
     {
         public int leftBorder, rightBorder; // position of the trackborders, counting from the left 

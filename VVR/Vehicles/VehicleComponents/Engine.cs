@@ -38,7 +38,7 @@ namespace VVR.Vehicles.VehicleComponents
         }
         float horsePower; //max speed
         float torque; //acceleration
-        float reliability;
+        bool reliability;
         float balance;// gives bonus to handling
         float fuelconsumption;
         float engineWeight;

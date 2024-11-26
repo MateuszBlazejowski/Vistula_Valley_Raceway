@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Teams\" />
+    <Folder Include="Players\" />
     <Folder Include="VVR_logic\" />
   </ItemGroup>
 
