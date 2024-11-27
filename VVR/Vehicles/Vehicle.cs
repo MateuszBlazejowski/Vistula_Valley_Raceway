@@ -35,3 +35,23 @@ namespace VVR.Vehicles
         }
     }
 }
+
+/*
+            SAMPLE CAR
+            
+            Console.WriteLine("Sample Car:");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write('\'');
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write('▄');//Console.Write('█');
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine('\'');
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write('\'');
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("▀");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine('\'');
+ */

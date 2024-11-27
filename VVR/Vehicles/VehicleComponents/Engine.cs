@@ -36,13 +36,18 @@ namespace VVR.Vehicles.VehicleComponents
             get;
             set;
         }
-
+        float horsePower; //max speed
+        float torque; //acceleration
+        float reliability;
+        float balance;// gives bonus to handling
+        float fuelconsumption;
+        float engineWeight;
 
         //max speed
         float horsePower
         {
             get;
-            set; 
+            set;
         }
 
         //acceleration

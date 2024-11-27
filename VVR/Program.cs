@@ -1,39 +1,34 @@
-﻿using VVR.Vehicles.VehicleComponents;
+﻿using System.Runtime.InteropServices;
+
+using VVR.Vehicles.VehicleComponents;
 using VVR.Locations;
 using VVR.Visuals;
+using VVR.VVR_logic;
 
 namespace VVR
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] args)  
         {
+            Console.CursorVisible = false; // disable winking from the cursor running around the console
 
+            Console.WriteLine("\nCar goes vroom:)))");
+            Thread.Sleep(1000);
 
-            Console.WriteLine("Car no longer goes vroom:(((");
-            Console.WriteLine("Sample Car:");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write('\'');
-            Console.BackgroundColor = ConsoleColor.DarkRed;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write('▄');//Console.Write('█');
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine('\'');
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write('\'');
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write("▀");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine('\'');
+            GameLogic gameLogic = new GameLogic();
+            ImageRendering imageGenerating = new ImageRendering(gameLogic);
+            Thread imageGeneratingThread = new Thread(imageGenerating.Play);
+            imageGeneratingThread.Start();
 
+            gameLogic.CheckForKey();
 
-            Thread.Sleep(2000);
-            ImageGenerating imageGenerating = new ImageGenerating();
-            //imageGenerating.GenerateFixedTrack();
-            imageGenerating.Play();
-            Engine eng = new Engine(4, 2.7f, Configuration.Flat, EngineType.Turbocharged);
+            imageGeneratingThread.Join();
+
+           Engine eng = new Engine(4, 2.7f, Configuration.Flat, EngineType.Turbocharged);
             eng.PrintEngineStats();
+
+            Console.CursorVisible = true;
         }
     }
 }

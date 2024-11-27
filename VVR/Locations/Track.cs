@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace VVR.Locations
 {
     internal class Track
-    {
-        /*
+    {       
         float Condition { get; set; }//overall track condition, the lower the less grip a car has
         bool isWet = false;
         int Width {get; set;}//how many cars can fit ar once side by side
@@ -23,11 +22,12 @@ namespace VVR.Locations
             this.length = length;
             this.name = name;
             this.pitBoxAmmount = pitBoxAmmount;
-        }*/
+        }
 
         public List<TrackPiece> trackPieces = new List<TrackPiece>();
         public Track()
-        { }
+        {
+        }
         
         
 

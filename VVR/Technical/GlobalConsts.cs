@@ -8,6 +8,7 @@ namespace VVR.Technical
 {
     public static class GlobalConsts
     {
+        // logic constants: 
         public const float VENGINEMASSBIAS = 1.2f;
         public const float VENGINESIZEBIAS = 0.8f;
         public const float ENGINESIZINGCONST = 0.1f;
@@ -26,9 +27,12 @@ namespace VVR.Technical
         public const float FUELCONSUMPTIONCONST= 4.0f;
         public const float FORCEDINDUCTIONFUELCONSUMPTION= 1.0f;
         public const float FORCEDINDUCTIONMASS = 20.0f;
-        public const int MAXTRACKWIDTH = 100;
-        public const int TRACKFRAMELENGTH = 16;
         public const float DEFAULTFUELTANK = 60.0f;
         public const float FRAMEWEIGHTCONST = 0.25f;
+
+        // visual constants: 
+        public const int MAXTRACKWIDTH = 100;
+        public const int TRACKFRAMELENGTH = 16;
+        public static readonly ConsoleColor[] TrackColors = { ConsoleColor.White, ConsoleColor.Red };
     }
 }
