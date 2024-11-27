@@ -25,7 +25,7 @@ namespace VVR
 
             imageGeneratingThread.Join();
 
-           Engine eng = new Engine(4, 2.7f, Configuration.Flat, EngineType.Turbocharged);
+            Engine eng = new Engine(4, 2.7f, Configuration.Flat, EngineType.Turbocharged);
             eng.PrintEngineStats();
 
             Console.CursorVisible = true;

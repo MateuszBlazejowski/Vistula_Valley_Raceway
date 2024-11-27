@@ -36,12 +36,6 @@ namespace VVR.Vehicles.VehicleComponents
             get;
             set;
         }
-        float horsePower; //max speed
-        float torque; //acceleration
-        float reliability;
-        float balance;// gives bonus to handling
-        float fuelconsumption;
-        float engineWeight;
 
         //max speed
         float horsePower
@@ -107,12 +101,12 @@ namespace VVR.Vehicles.VehicleComponents
             float weight = 0.0f;
             if (config == Configuration.V)
             {
-                weight = (cylinderAmmount / displacement +displacement) * GlobalConsts.VENGINEMASSBIAS * GlobalConsts.ENGINEWEIGHTCONST;
+                weight = (cylinderAmmount / displacement + displacement) * GlobalConsts.VENGINEMASSBIAS * GlobalConsts.ENGINEWEIGHTCONST;
 
             }
             else//conf is flat or inline
             {
-                weight = (cylinderAmmount / displacement +displacement) * GlobalConsts.ENGINEWEIGHTCONST;
+                weight = (cylinderAmmount / displacement + displacement) * GlobalConsts.ENGINEWEIGHTCONST;
             }
             if (type == EngineType.Supercharged)
             {
