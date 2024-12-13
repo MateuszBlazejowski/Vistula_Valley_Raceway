@@ -8,7 +8,7 @@ using VVR.Vehicles.VehicleComponents;
 
 namespace VVR.Vehicles
 {
-    internal abstract class Vehicle
+    internal class Vehicle
     {
         float mass;
         Engine engine;
@@ -17,6 +17,14 @@ namespace VVR.Vehicles
         Tyres tyresBack;
 
 
+        public bool isHuman;
+        public int positionX;
+        public float positionY;
+        public int lapCount;
+        public float speed;
+        public ConsoleColor bodyColor;
+        public ConsoleColor roofTopColor;
+
         public Vehicle(int cylamm, float disp, float _maxEngineSize, float _tireWearFront = 0.0f, TyreType _tireTypeFront = TyreType.Soft, float _tireWearBack = 0.0f, TyreType _tireTypeBack = TyreType.Soft, float _fuelTankSize = GlobalConsts.DEFAULTFUELTANK, float _currentFuel = GlobalConsts.DEFAULTFUELTANK, Configuration conf = Configuration.Inline, EngineType t = EngineType.NaturallyAspirated)
         {
             engine = new Engine(cylamm, disp, conf, t);
@@ -24,6 +32,7 @@ namespace VVR.Vehicles
             tyresFront = new Tyres(_tireWearFront, _tireTypeFront);
             tyresFront = new Tyres(_tireWearBack, _tireTypeBack);
             mass = engine.engineWeight + frame.frameWeight;
+            
         }
         public Vehicle(Engine _eng, Frame _frame, Tyres _tyresfront, Tyres _tyresBack)
         {
@@ -32,6 +41,13 @@ namespace VVR.Vehicles
             tyresFront = _tyresfront;
             tyresBack = _tyresBack;
             mass = engine.engineWeight + frame.frameWeight;
+        }
+
+        public Vehicle(ConsoleColor _bodyColor, ConsoleColor _roofTopColor, bool _isHuman)//constructor to test visuals 
+        { 
+            isHuman = _isHuman;
+            bodyColor = _bodyColor;
+            roofTopColor = _roofTopColor;
         }
     }
 }

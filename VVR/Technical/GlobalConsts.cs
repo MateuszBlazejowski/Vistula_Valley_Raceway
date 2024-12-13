@@ -30,9 +30,15 @@ namespace VVR.Technical
         public const float DEFAULTFUELTANK = 60.0f;
         public const float FRAMEWEIGHTCONST = 0.25f;
 
-        // visual constants: 
+        // visual constants:  
         public const int MAXTRACKWIDTH = 100;
-        public const int TRACKFRAMELENGTH = 16;
-        public static readonly ConsoleColor[] TrackColors = { ConsoleColor.White, ConsoleColor.Red };
+        // WARNING: TRACKFRAMELENGTH greater than the track length IS NOT ALLOWED  
+        public const int TRACKFRAMELENGTH = 16; // increasing it will enlarge piece of track displayed on screen, however exeeding the size of a track will crash the program 
+        public static readonly ConsoleColor[] DefaultTrackColors = { ConsoleColor.White, ConsoleColor.Red };
+        public static readonly ConsoleColor[] RainbowTrackColors = { ConsoleColor.Red, ConsoleColor.DarkYellow /*kind of orange*/, ConsoleColor.Yellow, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.DarkBlue, ConsoleColor.DarkMagenta }; // red orange yellow green blue darkblue purple  
+        public static readonly ConsoleColor[] BeachTrackColors = {ConsoleColor.Yellow, ConsoleColor.Blue };
+        public static readonly ConsoleColor[] HelloKittyTrackColors = { ConsoleColor.Magenta/*kind of pink*/, ConsoleColor.White };
+        public static readonly TimeSpan frameDuration = TimeSpan.FromMilliseconds(70); 
     }
 }
+ 
