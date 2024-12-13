@@ -30,7 +30,7 @@ namespace VVR.Vehicles
             engine = new Engine(cylamm, disp, conf, t);
             frame = new Frame(_maxEngineSize, _fuelTankSize, _currentFuel);
             tyresFront = new Tyres(_tireWearFront, _tireTypeFront);
-            tyresFront = new Tyres(_tireWearBack, _tireTypeBack);
+            tyresBack = new Tyres(_tireWearBack, _tireTypeBack);
             mass = engine.engineWeight + frame.frameWeight;
             
         }
@@ -71,3 +71,14 @@ namespace VVR.Vehicles
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine('\'');
  */
+
+        public void PrintVehicleInfo()
+        {
+            engine.PrintEngineStats();
+            frame.PrintFrame();
+            tyresFront.PrintTyres();
+            tyresBack.PrintTyres();
+            Console.WriteLine($"The vehicle mass is {mass}");
+        }
+    }
+}

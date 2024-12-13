@@ -18,18 +18,23 @@ namespace VVR.Vehicles.VehicleComponents
         //0 is no wear = new tyres
         //100 is fully worn tyres, no grip and should pop 
         {
-            get => tireWear;
-            set => tireWear = value;
+            get ;
+            set ;
         }
         TyreType tireType
         {
-            get => tireType;
-            set => tireType = value;
+            get;
+            set ;
         }
         public Tyres(float _tireWear = 0.0f, TyreType _tireType = TyreType.Soft)
         {
             tireWear = _tireWear;
             tireType = _tireType;
+        }
+
+        public void PrintTyres()
+        {
+            Console.WriteLine($"The tyre compound is {tireType}, and their current wear is {tireWear}");
         }
     }
 }

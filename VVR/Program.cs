@@ -40,6 +40,9 @@ namespace VVR
             Engine eng = new Engine(4, 2.7f, Configuration.Flat, EngineType.Turbocharged);
             eng.PrintEngineStats();
 
+            Vehicle veh = new Vehicle(4 , 2.7f, 10);
+            veh.PrintVehicleInfo();
+
             Console.CursorVisible = true;
         }
     }
