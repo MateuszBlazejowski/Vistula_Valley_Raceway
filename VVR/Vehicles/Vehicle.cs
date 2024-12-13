@@ -32,7 +32,7 @@ namespace VVR.Vehicles
             tyresFront = new Tyres(_tireWearFront, _tireTypeFront);
             tyresBack = new Tyres(_tireWearBack, _tireTypeBack);
             mass = engine.engineWeight + frame.frameWeight;
-            
+
         }
         public Vehicle(Engine _eng, Frame _frame, Tyres _tyresfront, Tyres _tyresBack)
         {
@@ -44,13 +44,23 @@ namespace VVR.Vehicles
         }
 
         public Vehicle(ConsoleColor _bodyColor, ConsoleColor _roofTopColor, bool _isHuman)//constructor to test visuals 
-        { 
+        {
             isHuman = _isHuman;
             bodyColor = _bodyColor;
             roofTopColor = _roofTopColor;
         }
+
+        public void PrintVehicleInfo()
+        {
+            engine.PrintEngineStats();
+            frame.PrintFrame();
+            tyresFront.PrintTyres();
+            tyresBack.PrintTyres();
+            Console.WriteLine($"The vehicle mass is {mass}");
+        }
     }
 }
+
 
 /*
             SAMPLE CAR
@@ -72,13 +82,4 @@ namespace VVR.Vehicles
             Console.WriteLine('\'');
  */
 
-        public void PrintVehicleInfo()
-        {
-            engine.PrintEngineStats();
-            frame.PrintFrame();
-            tyresFront.PrintTyres();
-            tyresBack.PrintTyres();
-            Console.WriteLine($"The vehicle mass is {mass}");
-        }
-    }
-}
+
