@@ -8,7 +8,7 @@ using VVR.Vehicles.VehicleComponents;
 
 namespace VVR.Vehicles
 {
-    internal abstract class Vehicle
+    internal class Vehicle
     {
         float mass;
         Engine engine;
@@ -22,7 +22,7 @@ namespace VVR.Vehicles
             engine = new Engine(cylamm, disp, conf, t);
             frame = new Frame(_maxEngineSize, _fuelTankSize, _currentFuel);
             tyresFront = new Tyres(_tireWearFront, _tireTypeFront);
-            tyresFront = new Tyres(_tireWearBack, _tireTypeBack);
+            tyresBack = new Tyres(_tireWearBack, _tireTypeBack);
             mass = engine.engineWeight + frame.frameWeight;
         }
         public Vehicle(Engine _eng, Frame _frame, Tyres _tyresfront, Tyres _tyresBack)
@@ -32,6 +32,15 @@ namespace VVR.Vehicles
             tyresFront = _tyresfront;
             tyresBack = _tyresBack;
             mass = engine.engineWeight + frame.frameWeight;
+        }
+
+        public void PrintVehicleInfo()
+        {
+            engine.PrintEngineStats();
+            frame.PrintFrame();
+            tyresFront.PrintTyres();
+            tyresBack.PrintTyres();
+            Console.WriteLine($"The vehicle mass is {mass}");
         }
     }
 }
