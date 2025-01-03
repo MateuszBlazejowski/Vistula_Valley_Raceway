@@ -30,15 +30,23 @@ namespace VVR.Technical
         public const float DEFAULTFUELTANK = 60.0f;
         public const float FRAMEWEIGHTCONST = 0.25f;
 
+        public const string GAME_FINISHED_MESSAGE = "END";
+
+        public const int RACE_IN_LAPS = 5;
+        public const int DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING = 3;  
+        
+
         // visual constants:  
         public const int MAXTRACKWIDTH = 100;
-        // WARNING: TRACKFRAMELENGTH greater than the track length IS NOT ALLOWED  
-        public const int TRACKFRAMELENGTH = 16; // increasing it will enlarge piece of track displayed on screen, however exeeding the size of a track will crash the program 
+        public const int ONE_CHAR_LENGTH_IRL = 3; // value represents scaled char length in real life, ex: 3 - a char is 3m long irl
+        // WARNING: TRACKFRAMELENGTH greater than the track length   !!!! IS NOT ALLOWED  !!!! and will crash the game
+        // WARNING: TRACKFRAMELENGTH + OTHER DISPLAYED LINES must NOT be bigger than the console Y dimension, otherwise everything crashes
+        public const int TRACKFRAMELENGTH = 20; // however the smaller the frame the shorter is printing it to the console
         public static readonly ConsoleColor[] DefaultTrackColors = { ConsoleColor.White, ConsoleColor.Red };
         public static readonly ConsoleColor[] RainbowTrackColors = { ConsoleColor.Red, ConsoleColor.DarkYellow /*kind of orange*/, ConsoleColor.Yellow, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.DarkBlue, ConsoleColor.DarkMagenta }; // red orange yellow green blue darkblue purple  
         public static readonly ConsoleColor[] BeachTrackColors = {ConsoleColor.Yellow, ConsoleColor.Blue };
         public static readonly ConsoleColor[] HelloKittyTrackColors = { ConsoleColor.Magenta/*kind of pink*/, ConsoleColor.White };
-        public static readonly TimeSpan frameDuration = TimeSpan.FromMilliseconds(70); 
+        public static readonly TimeSpan frameDuration = TimeSpan.FromMilliseconds(37); 
     }
 }
  

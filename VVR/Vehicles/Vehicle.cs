@@ -16,14 +16,18 @@ namespace VVR.Vehicles
         Tyres tyresFront;
         Tyres tyresBack;
 
-
+        public bool isRaceFinished; 
+        public int startingPosition;
         public bool isHuman;
         public int positionX;
-        public float positionY;
-        public int lapCount;
-        public float speed;
+        public double positionY;
+        public int? positionOnFrameY;
+        public int lapCounter;
+        public double speed;
         public ConsoleColor bodyColor;
         public ConsoleColor roofTopColor;
+
+        public string id;
 
         public Vehicle(int cylamm, float disp, float _maxEngineSize, float _tireWearFront = 0.0f, TyreType _tireTypeFront = TyreType.Soft, float _tireWearBack = 0.0f, TyreType _tireTypeBack = TyreType.Soft, float _fuelTankSize = GlobalConsts.DEFAULTFUELTANK, float _currentFuel = GlobalConsts.DEFAULTFUELTANK, Configuration conf = Configuration.Inline, EngineType t = EngineType.NaturallyAspirated)
         {
@@ -43,11 +47,16 @@ namespace VVR.Vehicles
             mass = engine.engineWeight + frame.frameWeight;
         }
 
-        public Vehicle(ConsoleColor _bodyColor, ConsoleColor _roofTopColor, bool _isHuman)//constructor to test visuals 
+        public Vehicle(string _id, ConsoleColor _bodyColor, ConsoleColor _roofTopColor, bool _isHuman, int posX, int startingPosition, double _speed)//constructor to test visuals 
         {
             isHuman = _isHuman;
             bodyColor = _bodyColor;
             roofTopColor = _roofTopColor;
+            positionX = posX;
+            positionY =  - (startingPosition * GlobalConsts.DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING);
+            speed = _speed;
+            isRaceFinished = false;
+            id = _id;
         }
 
         public void PrintVehicleInfo()

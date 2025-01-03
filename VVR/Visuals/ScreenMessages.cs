@@ -1,4 +1,5 @@
 ﻿using System;
+using VVR.Vehicles;
 using VVR.Technical;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace VVR.Visuals
 {
     internal class ScreenMessages
-    {
+    { 
         public void PrintGameStartMessage(ConsoleColor[] trackColorScheme)
         {
             Console.Clear();
@@ -32,12 +33,14 @@ namespace VVR.Visuals
             //    }
             //}
         }
-        public void PrintGameEndMessage()
+        public void PrintGameEndMessage(List<Vehicle> finishedVehicles)
         {
-            Console.Clear();
-            Console.WriteLine("\nESC pressed. Exiting...\n\n");
-            Thread.Sleep(2000);
-            Console.Clear();
+            Console.Clear ();
+            for (int i = 0; i < finishedVehicles.Count  ; i++)
+            {
+                Console.WriteLine($"Position {i+1}: {finishedVehicles[i].id}");
+                if (finishedVehicles[i].isHuman == true) break;
+            }
         }
         public void PrintChooseTrackColorSchemeMessage()
         {
