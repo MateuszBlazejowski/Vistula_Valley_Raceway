@@ -21,17 +21,17 @@ namespace VVR.Visuals
                 Console.Write(i);
                 Thread.Sleep(1000);
             }
-            //if (trackColorScheme == GlobalConsts.RainbowTrackColors)
-            //{
-            //    for (int i = 4; i > 0; i--)
-            //    {
-            //        Console.Clear();
-            //        Console.Write("\n\n               EDITION XDDD");
-            //        Thread.Sleep(300);
-            //        Console.Clear();
-            //        Thread.Sleep(300);
-            //    }
-            //}
+            if (trackColorScheme == GlobalConsts.RainbowTrackColors)
+            {
+                for (int i = 4; i > 0; i--)
+                {
+                    Console.Clear();
+                    Console.Write("\n\n          GAY EDITION XDDD");
+                    Thread.Sleep(300);
+                    Console.Clear();
+                    Thread.Sleep(300);
+                }
+            }
         }
         public void PrintGameEndMessage(List<Vehicle> finishedVehicles)
         {
