@@ -33,8 +33,8 @@ namespace VVR.Technical
         public const string GAME_FINISHED_MESSAGE = "END";
 
         public const int RACE_IN_LAPS = 5;
-        public const int DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING = 3;  
-        
+        public const int DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING = 3;
+        public const int TRACK_COMPONENT_AMOUNT = 3;
 
         // visual constants:  
         public const int MAXTRACKWIDTH = 100;
