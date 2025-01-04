@@ -16,4 +16,8 @@
     <None Remove="Teams\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Locations\TrackAssets\" />
+  </ItemGroup>
+
 </Project>
