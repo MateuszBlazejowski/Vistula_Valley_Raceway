@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VVR", "VVR.csproj", "{431A015B-6439-4B67-A713-F50A2AF7839F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackConverter", "TrackConverter\TrackConverter.csproj", "{952EC398-7147-48A2-94F3-0A1F1549084A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{431A015B-6439-4B67-A713-F50A2AF7839F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{431A015B-6439-4B67-A713-F50A2AF7839F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{431A015B-6439-4B67-A713-F50A2AF7839F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{952EC398-7147-48A2-94F3-0A1F1549084A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{952EC398-7147-48A2-94F3-0A1F1549084A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{952EC398-7147-48A2-94F3-0A1F1549084A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{952EC398-7147-48A2-94F3-0A1F1549084A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

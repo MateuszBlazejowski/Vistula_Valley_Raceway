@@ -1,10 +1,10 @@
-namespace Program;
+namespace VVR.TrackConverter;
 
 public static class Parser
 {
     public static void ParseCSV(string filepath, string filename)
     {
-        var destinationPath = Path.Combine("..", "Locations", "TrackAssets", $"{filename}.track");
+        var destinationPath = Path.Combine( "Locations", "TrackAssets", $"{filename}.track");
 
         using StreamReader sr = new StreamReader(filepath);
         using StreamWriter sw = new StreamWriter(destinationPath);
