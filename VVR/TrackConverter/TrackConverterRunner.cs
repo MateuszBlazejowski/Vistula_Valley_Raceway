@@ -1,4 +1,4 @@
-﻿namespace Program
+namespace VVR.TrackConverter
 {
     public static class Program
     {
@@ -14,18 +14,19 @@
             return absolutePath;
         }
 
-        public static void Main(string[] args)
+        public static void RunTrackConverter(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine("Please specify file paths to files containing tracks");
-                return;
+                throw new Exception("Too few arguments");
             }
 
             Parallel.ForEach(args, arg =>
             {
                 string path = GetFullPath(arg);
                 string filename = Path.GetFileName(arg).Split('.')[0];
+                Console.WriteLine($"{filename}: {path}");
                 Parser.ParseCSV(path, filename);
             });
         }

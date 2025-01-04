@@ -5,6 +5,7 @@ using VVR.Visuals;
 using VVR.Vehicles;
 using VVR.VVR_logic;
 using VVR.Technical;
+using VVR.TrackConverter;
 
 namespace VVR
 {
@@ -12,6 +13,21 @@ namespace VVR
     {
         static void Main(string[] args)  
         {
+            if (args.Length != 0)
+            {
+                Console.WriteLine("Adding tracks to the game....");
+                try
+                {
+                    TrackConverter.Program.RunTrackConverter(args);
+                    Console.WriteLine("Track added successfully!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to add track: {ex.Message}");
+                }
+
+                return;
+            }
             // disabling winking from the cursor running around the console:
             Console.CursorVisible = false; 
 
