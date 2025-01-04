@@ -13,11 +13,11 @@ using VVR.Technical;
 namespace VVR.VVR_logic
 {
 
-    
+
     public class TrackColorSchemeSetEventArgs : EventArgs
     {
         public ConsoleKey KeyPressed { get; }
-        public TrackColorSchemeSetEventArgs(ConsoleKey keyPressed) 
+        public TrackColorSchemeSetEventArgs(ConsoleKey keyPressed)
         {
             KeyPressed = keyPressed;
         }
@@ -27,12 +27,14 @@ namespace VVR.VVR_logic
         public int deltaPosX;
         public float deltaSpeed;
         public int carIndex;
+        public bool isCrashed;
 
-        public VehicleMovingParametersChangedEventArgs(int deltaPosX, float deltaSpeed, int carIndex) // posX should be only -1, 0 or +1, representing change in posX, speed 
+        public VehicleMovingParametersChangedEventArgs(int deltaPosX, float deltaSpeed, int carIndex, bool isCrashed) // posX should be only -1, 0 or +1, representing change in posX, speed 
         {
             this.deltaPosX = deltaPosX;
             this.deltaSpeed = deltaSpeed;
             this.carIndex = carIndex;
+            this.isCrashed = isCrashed;
         }
     }
     public class TechnicalMessageEventArgs : EventArgs
@@ -52,7 +54,7 @@ namespace VVR.VVR_logic
         // Method to check for key input
 
         ScreenMessages messages = new ScreenMessages();
-        public List<Vehicle> vehicles =  new List<Vehicle>();
+        public List<Vehicle> vehicles = new List<Vehicle>();
         public List<VehicleVisual> vehiclesVisual = new List<VehicleVisual>();
         public List<Vehicle> finnishedVehicles = new List<Vehicle>();
         public Track track = new Track();
@@ -109,7 +111,7 @@ namespace VVR.VVR_logic
                             }
                             keyProcessed = true; // Mark key as processed
                         }
-                        VehicleMovingParametersChanged?.Invoke(this, new VehicleMovingParametersChangedEventArgs(deltaPosX, deltaSpeed, carIndex));
+                        VehicleMovingParametersChanged?.Invoke(this, new VehicleMovingParametersChangedEventArgs(deltaPosX, deltaSpeed, carIndex, false));
                         vehicles[carIndex].positionX += deltaPosX;
                         vehicles[carIndex].speed += deltaSpeed;
                     }
@@ -121,21 +123,21 @@ namespace VVR.VVR_logic
             inputThread.IsBackground = true;
             inputThread.Start();
         }
-           
+
         public void CheckForKeyColorScheme()
         {
             while (true)
             {
                 messages.PrintChooseTrackColorSchemeMessage();
                 ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
-             
+
 
                 if (keyInfo.Key != ConsoleKey.D1 && keyInfo.Key != ConsoleKey.D2 && keyInfo.Key != ConsoleKey.D3 && keyInfo.Key != ConsoleKey.D4)
                 {
                     messages.PrintInvalidInputMessage();
                     continue;
                 }
-                else 
+                else
                 {
                     ColorSchemeSet?.Invoke(this, new TrackColorSchemeSetEventArgs(keyInfo.Key));
                     break;
@@ -146,12 +148,12 @@ namespace VVR.VVR_logic
         {
             float deltaSpeed = 0;
             int deltaPosX = 0;
-            if (!vehicles[carIndex].isHuman == true)            
+            if (!vehicles[carIndex].isHuman == true)
             {
                 AiDriver driver = new AiDriver();
-                driver.Drive(carIndex,ref deltaPosX,ref deltaSpeed, track, vehicles);       
+                driver.Drive(carIndex, ref deltaPosX, ref deltaSpeed, track, vehicles);
             }
-            VehicleMovingParametersChanged?.Invoke(this, new VehicleMovingParametersChangedEventArgs(deltaPosX, deltaSpeed, carIndex));
+            VehicleMovingParametersChanged?.Invoke(this, new VehicleMovingParametersChangedEventArgs(deltaPosX, deltaSpeed, carIndex, false));
             vehicles[carIndex].positionX += deltaPosX;
             vehicles[carIndex].speed += deltaSpeed;
         }
@@ -164,17 +166,72 @@ namespace VVR.VVR_logic
             {
                 if (vehicles[i].isHuman == false)
                 {
-                    vehicles[i].positionY += vehicles[i].speed / vehicles[humanIndex].speed;               
+                    vehicles[i].positionY += vehicles[i].speed / vehicles[humanIndex].speed;
                 }
                 if (vehicles[i].positionY > track.trackPieces.Count)
                 {
-                    vehicles[i].positionY -= (track.trackPieces.Count+1);
+                    vehicles[i].positionY -= (track.trackPieces.Count + 1);
                     vehicles[i].lapCounter += 1;
                 }
             }
         }
 
-        private bool CheckAndFindWinners() 
+        private void banishToMiddle(int carIndex, int Yposition)
+        {
+            int newX = (track.trackPieces[track.trackPieces.Count - Yposition].rightBorder
+                        + track.trackPieces[track.trackPieces.Count - Yposition].leftBorder) / 2;
+            float deltaSpeed = -(3 * (float)vehicles[carIndex].speed / 4);
+
+            VehicleMovingParametersChanged?.Invoke(this,
+                new VehicleMovingParametersChangedEventArgs(newX, deltaSpeed, carIndex, true));
+
+            vehicles[carIndex].positionX = newX;
+            vehicles[carIndex].speed += deltaSpeed;
+        }
+
+        private void checkIfAnyoneCrashed()
+        {
+            for (int i = 0; i < vehicles.Count; i++)
+            {
+                //calculating where the vehicle is
+                int Yposition = (int)Math.Round(vehicles[i].positionY);
+
+                //check if it is on track
+                //these calculations need the modulo bc we start with negative nums
+                //they also need to be reffered from the bottom of the trackpiece list so if you want to access the 2 tile
+                //you need to access the 3rd tile from the bottom
+                if (vehicles[i].positionX < (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition) % track.trackPieces.Count].leftBorder + 2) ||
+                    vehicles[i].positionX < (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition + 1) % track.trackPieces.Count].leftBorder + 2) ||
+                    vehicles[i].positionX > (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition) % track.trackPieces.Count].rightBorder - 2) ||
+                    vehicles[i].positionX > (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition + 1) % track.trackPieces.Count].rightBorder - 2))
+                {
+                    Console.WriteLine("You crashed!");
+                    banishToMiddle(i, Yposition);
+                }
+
+                for (int j = i + 1; j < vehicles.Count; j++)
+                {
+                    int AIpositionY = (int)Math.Round(vehicles[j].positionY);
+
+                    //check if aligned on y axis
+                    if ((Yposition < AIpositionY ) || (Yposition > (AIpositionY+1)))
+                    {
+                        continue;
+                    }
+                    //check if aligned on x axis
+                    if ((vehicles[i].positionX+1) < (vehicles[j].positionX-1)|| (vehicles[i].positionX -1) > (vehicles[j].positionX + 1))
+                    {
+                        continue;
+                    }
+                    Console.WriteLine("Crashed into AI!");
+                    //punish both cars
+                    banishToMiddle(i, Yposition);
+                    //Thread.Sleep(300);
+                }
+            }
+        }
+
+        private bool CheckAndFindWinners()
         {
             List<Vehicle> finishedCarsLocal = new List<Vehicle>();
             for (int i = 0; i < vehicles.Count; i++)
@@ -207,14 +264,16 @@ namespace VVR.VVR_logic
                 logicReady.WaitOne(); // Wait for rendering thread to be ready
                 logicReady.Reset();   // Reset for the next iteration
 
-                for (int i = 0; i < vehicles.Count ; i++)
-                { 
-                VehicleMoved(i);                
+                for (int i = 0; i < vehicles.Count; i++)
+                {
+                    VehicleMoved(i);
                 }
                 updateCarPositionY();
 
+                checkIfAnyoneCrashed();
+
                 if (CheckAndFindWinners()) // if human finished then we end the game 
-                { 
+                {
                     break;
                 }
 

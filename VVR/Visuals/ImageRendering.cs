@@ -60,7 +60,15 @@ namespace VVR.Visuals
 
         private void ChangeVehiclePosition(object? sender, VehicleMovingParametersChangedEventArgs e)
         {
+            if(e.isCrashed)
+            {
+                vehicles[e.carIndex].positionX = e.deltaPosX;
+                //if you crashed we change your position in the crash checker so no need to do it here
+            }
+            else
+            { 
             vehicles[e.carIndex].positionX += e.deltaPosX; // changing posX by the delta
+            }
             vehicles[e.carIndex].speed += e.deltaSpeed;
         }
 
