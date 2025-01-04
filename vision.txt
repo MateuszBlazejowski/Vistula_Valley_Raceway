@@ -25,3 +25,36 @@ Later add 4th area
 -interview for popularity or money 
 
 
+
+TO DO: 
+cars speed in m/s ;  + 
+human car speed affecting frame rate;  +
+synchronizing threads; + 
+aidriver ;
+crashing mechanics ;
+starting positions ;
+laps counter;  + 
+winning condition; + 
+speed mechanics;
+escaping the game  ;
+random track generator for the given length ;
+
+to choose at the begginning:
+ai driver level (difficulty)
+ai driver number
+track color +
+car color
+track from existing
+random track with a given length and width 
+
+display at the center
+above we have your lap counter and position 
+below your speed 
+
+techincal:
+no global consts, saving it in json or other file;
+tracks should be saved in txt files looking exactly as they will in the game;
+
+
+
+
