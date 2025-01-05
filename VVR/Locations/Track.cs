@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VVR.Technical;
 
 namespace VVR.Locations
 {
     internal class Track // track list is implemented in such a way that the first piece is the top part and the last piece is the lowest part
         //cars are travelling from the bottom to the the top, which means the last item in the list is crossed first after the game starts 
-    {       
+    {
+        private readonly string[] _trackComponentFileLocations = Directory.GetFiles(Path.Combine("Locations", "TrackAssets"), "*.track");
         float Condition { get; set; }//overall track condition, the lower the less grip a car has
         bool isWet = false;
         int Width {get; set;}//how many cars can fit ar once side by side
@@ -32,7 +34,7 @@ namespace VVR.Locations
         
         
 
-        public void GenerateFixedTrack() //for now track is fixed, but in future it is possible to write a function that will generate random track 
+        public void GenerateFixedTrack() //for now track is fixed, but in future it is possible to write a function that will generate random track
         {
             trackPieces.Clear();
             trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
@@ -96,7 +98,16 @@ namespace VVR.Locations
             trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
             trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
             trackPieces.Add(new TrackPiece(0, 50, '|', '|'));
-            trackPieces.Add(new TrackPiece(0, 50, '|', '|')); // the track is very short but sufficient for testing //FOR FURTHER DEVELOPMENT 
+            trackPieces.Add(new TrackPiece(0, 50, '|', '|')); // the track is very short but sufficient for testing //FOR FURTHER DEVELOPMENT
+        }
+
+        public void GenerateTrack()
+        {
+            Random random = new Random(2137); // Is that a Maciej Spychała reference???
+            for (int i = 0; i < GlobalConsts.TRACK_COMPONENT_AMOUNT; i++)
+            {
+                TrackParser.ParseCSV(_trackComponentFileLocations[random.Next(_trackComponentFileLocations.Length)], trackPieces);
+            }
         }
     }
 }
