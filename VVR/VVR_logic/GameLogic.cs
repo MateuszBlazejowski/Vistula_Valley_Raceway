@@ -84,7 +84,7 @@ namespace VVR.VVR_logic
                 int carIndex = vehicles.FindIndex(v => v.isHuman == true);
                 int deltaPosX = 0;
                 float deltaSpeed = 0;
-                int iterations = 0;
+                //int iterations = 0;
                 while (true)
                 {
 
@@ -101,11 +101,11 @@ namespace VVR.VVR_logic
                             {
                                 deltaPosX++;
                             }
-                            else if (lastKeyPressed == ConsoleKey.UpArrow)
+                            else if (lastKeyPressed == ConsoleKey.UpArrow && vehicles[carIndex].speed < GlobalConsts.MAX_SPEED)
                             {
                                 deltaSpeed++;
                             }
-                            else if (lastKeyPressed == ConsoleKey.DownArrow)
+                            else if (lastKeyPressed == ConsoleKey.DownArrow && vehicles[carIndex].speed > GlobalConsts.MIN_SPEED)
                             {
                                 deltaSpeed--;
                             }
@@ -176,11 +176,16 @@ namespace VVR.VVR_logic
             }
         }
 
-        private void banishToMiddle(int carIndex, int Yposition)
+        private void BanishToMiddle(int carIndex, int Yposition)
         {
             int newX = (track.trackPieces[track.trackPieces.Count - Yposition].rightBorder
                         + track.trackPieces[track.trackPieces.Count - Yposition].leftBorder) / 2;
-            float deltaSpeed = -(3 * (float)vehicles[carIndex].speed / 4);
+            float deltaSpeed = 0;
+            //if player already at minimum speed no need to slow them down
+            if (vehicles[carIndex].speed > GlobalConsts.MIN_SPEED)
+            {
+                deltaSpeed = -(3 * (float)vehicles[carIndex].speed / 4);
+            }
 
             VehicleMovingParametersChanged?.Invoke(this,
                 new VehicleMovingParametersChangedEventArgs(newX, deltaSpeed, carIndex, true));
@@ -189,44 +194,119 @@ namespace VVR.VVR_logic
             vehicles[carIndex].speed += deltaSpeed;
         }
 
-        private void checkIfAnyoneCrashed()
+        /// <summary>
+        /// checks if a car from vehicle list at index carindex and with y position has crashed into a wall and if so from which side
+        /// </summary>
+        /// <param name="carIndex"></param>
+        /// <param name="Yposition"></param>
+        /// <returns> 0->not crashed, -1->crashed from the left, 1->crashed from the right</returns>
+        public int CrashedIntoWall(int carIndex, int Yposition)
+        {
+            //check if it is on track
+            //these calculations need the modulo bc we start with negative nums
+            //they also need to be reffered from the bottom of the trackpiece list so if you want to access the 2 tile
+            //you need to access the 3rd tile from the bottom
+            //into left wall
+            if (vehicles[carIndex].positionX < (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition) % track.trackPieces.Count].leftBorder + 2) ||
+                    vehicles[carIndex].positionX < (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition + 1) % track.trackPieces.Count].leftBorder + 2))
+            {
+                return -1;
+            }
+            //into right wall
+            if (vehicles[carIndex].positionX > (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition) % track.trackPieces.Count].rightBorder - 2) ||
+                    vehicles[carIndex].positionX > (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition + 1) % track.trackPieces.Count].rightBorder - 2))
+            {
+                return 1;
+            }
+            //no crash
+            return 0;
+        }
+
+        /// <summary>
+        /// checks if 2 cars collided and from which side if they did
+        /// sides are based on car1
+        /// so if car 2 is on the right of car 1 and they crash the crash returns from the right
+        /// </summary>
+        /// <param name="car1Index"></param>
+        /// <param name="car2Index"></param>
+        /// <param name="car1Yposition"></param>
+        /// <param name="car2Yposition"></param>
+        /// <returns> 0->not crashed, -1->crashed from the left, 1->crashed from the right, 2->crashed from the front</returns>
+        public int CrashedIntoCar(int car1Index, int car2Index, int car1Yposition, int car2Yposition)
+        {
+
+            //if theyre not aligned on the y axis they cant crash
+            if ((car1Yposition < car2Yposition) || (car1Yposition > (car2Yposition + 1)))
+            {
+                return 0;
+            }
+            //check if aligned on x axis
+            if ((vehicles[car1Index].positionX + 1) < (vehicles[car2Index].positionX - 1) || (vehicles[car1Index].positionX - 1) > (vehicles[car2Index].positionX + 1))
+            {
+                return 0;
+            }
+            //from now on we know that they crashed now to check the side
+            //car 1 is to the left of car 2
+            if (vehicles[car1Index].positionX < vehicles[car2Index].positionX)
+            {
+                return 1;
+            }
+            //car1 is to the right of car2
+            else if (vehicles[car1Index].positionX > vehicles[car2Index].positionX)
+            {
+                return -1;
+            }
+            //if they didnt crash from the sides it has to be from top or bottom
+            else
+            {
+                return 2;
+            }
+
+            //another approach based on checking wheel position may come in handy later
+
+            ////check if right wheels of car2 touch left wheels of car2 
+            //if (vehicles[car1Index].positionX + 1 == vehicles[car2Index].positionX - 1)
+            //{
+            //    return 1;
+            //}
+            ////check if left wheels of car2 touch right wheels of car2 
+            //if (vehicles[car1Index].positionX - 1 == vehicles[car2Index].positionX + 1)
+            //{
+            //    return -1;
+            //}
+            ////checks if front of car1 is in the back of car2
+            //if (car1Yposition + 1 == car2Yposition)
+            //{
+            //    return 2;
+            //}
+            ////no crash
+            //return 0;
+        }
+
+        /// <summary>
+        /// checks if any car has crashed with the wall or another car if so it reduces its speed by 3/4 and moves it to the middle of the track
+        /// </summary>
+        private void CheckIfAnyoneCrashed()
         {
             for (int i = 0; i < vehicles.Count; i++)
             {
                 //calculating where the vehicle is
                 int Yposition = (int)Math.Round(vehicles[i].positionY);
-
-                //check if it is on track
-                //these calculations need the modulo bc we start with negative nums
-                //they also need to be reffered from the bottom of the trackpiece list so if you want to access the 2 tile
-                //you need to access the 3rd tile from the bottom
-                if (vehicles[i].positionX < (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition) % track.trackPieces.Count].leftBorder + 2) ||
-                    vehicles[i].positionX < (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition + 1) % track.trackPieces.Count].leftBorder + 2) ||
-                    vehicles[i].positionX > (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition) % track.trackPieces.Count].rightBorder - 2) ||
-                    vehicles[i].positionX > (track.trackPieces[(track.trackPieces.Count + track.trackPieces.Count - Yposition + 1) % track.trackPieces.Count].rightBorder - 2))
+                if (CrashedIntoWall(i, Yposition) == -1 || CrashedIntoWall(i, Yposition) == 1)
                 {
                     Console.WriteLine("You crashed!");
-                    banishToMiddle(i, Yposition);
+                    BanishToMiddle(i, Yposition);
                 }
 
                 for (int j = i + 1; j < vehicles.Count; j++)
                 {
                     int AIpositionY = (int)Math.Round(vehicles[j].positionY);
-
-                    //check if aligned on y axis
-                    if ((Yposition < AIpositionY ) || (Yposition > (AIpositionY+1)))
+                    if (CrashedIntoCar(i, j, Yposition, AIpositionY) != 0)
                     {
-                        continue;
+                        Console.WriteLine("Crashed into AI!");
+                        BanishToMiddle(i, Yposition);
+                        //Thread.Sleep(300);
                     }
-                    //check if aligned on x axis
-                    if ((vehicles[i].positionX+1) < (vehicles[j].positionX-1)|| (vehicles[i].positionX -1) > (vehicles[j].positionX + 1))
-                    {
-                        continue;
-                    }
-                    Console.WriteLine("Crashed into AI!");
-                    //punish both cars
-                    banishToMiddle(i, Yposition);
-                    //Thread.Sleep(300);
                 }
             }
         }
@@ -270,7 +350,7 @@ namespace VVR.VVR_logic
                 }
                 updateCarPositionY();
 
-                checkIfAnyoneCrashed();
+                CheckIfAnyoneCrashed();
 
                 if (CheckAndFindWinners()) // if human finished then we end the game 
                 {
