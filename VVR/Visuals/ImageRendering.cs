@@ -28,7 +28,7 @@ namespace VVR.Visuals
         private bool playStop = false;
         private char[,] frame = new char[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH]; //frame chars 
         private char[,] previousframe = new char[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH]; // previous frame chars, to compare what has changed
-                                                                                                             
+
         private ConsoleColor[,] fgColors = new ConsoleColor[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH]; //frame foreground color
         private ConsoleColor[,] bgColors = new ConsoleColor[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH]; //frame background color 
         private ConsoleColor[,] previousfgColors = new ConsoleColor[GlobalConsts.MAXTRACKWIDTH, GlobalConsts.TRACKFRAMELENGTH]; //previous frame foreground color, to compare what has changed
@@ -48,7 +48,7 @@ namespace VVR.Visuals
             humanIndex = vehicles.FindIndex(v => v.isHuman == true);
             //gameLogic.PlayerMoved += ChangePlayerPosition;
 
-            vehicles[humanIndex].positionOnFrameY = GlobalConsts.TRACKFRAMELENGTH/2;
+            vehicles[humanIndex].positionOnFrameY = GlobalConsts.TRACKFRAMELENGTH / 2;
 
             this.logicReady = gameLogic.logicReady;
             this.renderReady = gameLogic.renderReady;
@@ -60,14 +60,15 @@ namespace VVR.Visuals
 
         private void ChangeVehiclePosition(object? sender, VehicleMovingParametersChangedEventArgs e)
         {
-            if(e.isCrashed)
+            if (e.isCrashed)
             {
                 vehicles[e.carIndex].positionX = e.deltaPosX;
                 //if you crashed we change your position in the crash checker so no need to do it here
             }
             else
-            { 
-            vehicles[e.carIndex].positionX += e.deltaPosX; // changing posX by the delta
+            {
+                vehicles[e.carIndex].positionX += e.deltaPosX; // changing posX by the delta
+
             }
             vehicles[e.carIndex].speed += e.deltaSpeed;
         }
@@ -93,7 +94,7 @@ namespace VVR.Visuals
             }
             else if (e.KeyPressed == ConsoleKey.D4)
             {
-                trackColorScheme = GlobalConsts.HelloKittyTrackColors; 
+                trackColorScheme = GlobalConsts.HelloKittyTrackColors;
             }
         }
         private void RenderTrackFrame(int startingRow)
@@ -111,37 +112,37 @@ namespace VVR.Visuals
                 frame[track.trackPieces[((startingRow + i) % track.trackPieces.Count)].rightBorder, i] = track.trackPieces[((startingRow + i) % track.trackPieces.Count)].rightBorderSign;
                 // logic behind looping the track
 
-                if(startingRow + i == track.trackPieces.Count)
+                if (startingRow + i == track.trackPieces.Count)
                 {
                     for (int x = (track.trackPieces[((startingRow + i) % track.trackPieces.Count)].leftBorder + 1); x < track.trackPieces[((startingRow + i) % track.trackPieces.Count)].rightBorder; x++)
                     {
-                        if (x%2 == 0)
-                        frame[x, i] = '▀';
-                        else 
-                        frame[x, i] = '▄';
+                        if (x % 2 == 0)
+                            frame[x, i] = '▀';
+                        else
+                            frame[x, i] = '▄';
                         fgColors[x, i] = ConsoleColor.Gray;
                     }
                 } //starting line rendering
 
                 int colorIndicator = (startingRow + i) % trackColorScheme.Count();
                 fgColors[track.trackPieces[((startingRow + i) % track.trackPieces.Count)].leftBorder, i] = trackColorScheme[colorIndicator];
-                fgColors[track.trackPieces[((startingRow + i) % track.trackPieces.Count)].rightBorder, i] = trackColorScheme[colorIndicator];                 
+                fgColors[track.trackPieces[((startingRow + i) % track.trackPieces.Count)].rightBorder, i] = trackColorScheme[colorIndicator];
             }
         }
         private void RenderCar(char[,] frame, VehicleVisual car)// no parameters for now, but in future add position and car to find colors properties 
         {
             int posX = (int)car.positionX; //not an issue because it is checked earlier
             int posY = (int)car.positionOnFrameY; //not an issue because it is checked earlier
-            
-            if(posY >= 0 && posY < GlobalConsts.TRACKFRAMELENGTH)
+
+            if (posY >= 0 && posY < GlobalConsts.TRACKFRAMELENGTH)
             {
                 if (posX - 1 >= 0 && posX - 1 < GlobalConsts.MAXTRACKWIDTH)
-                { 
+                {
                     frame[posX - 1, posY] = '\'';
                     fgColors[posX - 1, posY] = ConsoleColor.DarkGray;
                 }
                 if (posX + 1 >= 0 && posX + 1 < GlobalConsts.MAXTRACKWIDTH)
-                {  
+                {
                     frame[posX + 1, posY] = '\'';
                     fgColors[posX + 1, posY] = ConsoleColor.DarkGray;
                 }
@@ -151,7 +152,7 @@ namespace VVR.Visuals
                     fgColors[posX, posY] = car.bodyColor;
                 }
             }
-            if (posY - 1 >= 0 && posY -1 < GlobalConsts.TRACKFRAMELENGTH)
+            if (posY - 1 >= 0 && posY - 1 < GlobalConsts.TRACKFRAMELENGTH)
             {
                 if (posX - 1 >= 0 && posX - 1 < GlobalConsts.MAXTRACKWIDTH)
                 {
@@ -168,13 +169,13 @@ namespace VVR.Visuals
                     frame[posX, posY - 1] = '▄'; //using ▄ and set bacground to another color in order to create an impression of the front of the car 
                     fgColors[posX, posY - 1] = car.roofTopColor;
                     bgColors[posX, posY - 1] = car.bodyColor;
-                }                                                
+                }
             }
             // this is all rendering one car. Checks are neccesary to print only this part of a car that fits in the frame in case car is on the edge of the frame
         }
 
         private void PrintFrame(char[,] frame)
-        {            
+        {
             for (int j = 0; j < GlobalConsts.TRACKFRAMELENGTH; j++) // Loop through rows (frame height)
             {
                 Console.SetCursorPosition(0, j); // Move cursor to the start of each row
@@ -189,7 +190,7 @@ namespace VVR.Visuals
                         Console.Write(frame[i, j]); // Write characters in place
                     }
 
-                }   
+                }
             }
             Console.ResetColor(); // Reset to default color
             Console.WriteLine();
@@ -235,14 +236,14 @@ namespace VVR.Visuals
         // WARNINGS:
         // HUMAN SPEED CANT BE ZERO 
         // SPEEDS SCHOULD NOT DIFFER MUCH, IT RUINS THE VISUAL DISPLAY 
-        
+
 
         private void updateCarPositionY()
         {
             int humanIndex = vehicles.FindIndex(v => v.isHuman == true);
-            vehicles[humanIndex].positionY+=1;
-                    if (vehicles[humanIndex].speed == 0) throw new Exception("wrong code, HUMANSPEED schould never be zero");
-            for (int i = 0;i<vehicles.Count;i++) 
+            vehicles[humanIndex].positionY += 1;
+            if (vehicles[humanIndex].speed == 0) throw new Exception("wrong code, HUMANSPEED schould never be zero");
+            for (int i = 0; i < vehicles.Count; i++)
             {
                 if (vehicles[i].isHuman == false)
                 {
@@ -250,14 +251,14 @@ namespace VVR.Visuals
                 }
                 if (vehicles[i].positionY > track.trackPieces.Count)
                 {
-                    vehicles[i].positionY -= (track.trackPieces.Count+1);
+                    vehicles[i].positionY -= (track.trackPieces.Count + 1);
                 }
             }
             humanPosition = (int)Math.Round(vehicles[humanIndex].positionY);
         }
         private void updateCarPositionOnFrameY()
         {
-            
+
 
             for (int i = 0; i < vehicles.Count; i++)
             {
@@ -270,11 +271,11 @@ namespace VVR.Visuals
                 // obtaining distance between them passing through finish line, when a car is behind a human then the value is negative
                 if (AiPosY < humanPosition)
                 {
-                    relativePositionToHumanPassingThrough0Line = AiPosY - humanPosition  + track.trackPieces.Count;
+                    relativePositionToHumanPassingThrough0Line = AiPosY - humanPosition + track.trackPieces.Count;
                 }
                 else
                 {
-                    relativePositionToHumanPassingThrough0Line = (humanPosition - AiPosY + track.trackPieces.Count) *(-1);
+                    relativePositionToHumanPassingThrough0Line = (humanPosition - AiPosY + track.trackPieces.Count) * (-1);
                 }
                 // now only choosing which distance is shorter and setting its value as a position relative to the human 
                 if (Math.Abs(relativePositionToHumanPassingThrough0Line) <= Math.Abs(relativePositionToHumanNOTPassingThrough0Line))
@@ -300,14 +301,14 @@ namespace VVR.Visuals
         public void Play()
         {
             messages.PrintGameStartMessage(trackColorScheme);
-            int startingRow =  track.trackPieces.Count - GlobalConsts.TRACKFRAMELENGTH/2 + GlobalConsts.DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING;
-            for(int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++) // filling previous frame with ' ', necessary for the first execution of PrintFrame  
+            int startingRow = track.trackPieces.Count - GlobalConsts.TRACKFRAMELENGTH / 2 + GlobalConsts.DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING;
+            for (int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++) // filling previous frame with ' ', necessary for the first execution of PrintFrame  
             {
                 for (int j = 0; j < GlobalConsts.TRACKFRAMELENGTH; j++)
                 {
                     previousframe[i, j] = ' ';
                     previousfgColors[i, j] = ConsoleColor.Black;
-                    previousbgColors[i,j] = ConsoleColor.Black;
+                    previousbgColors[i, j] = ConsoleColor.Black;
                 }
             }
             while (!playStop) //stop condition, some event like pressing the esc button 
@@ -347,5 +348,5 @@ namespace VVR.Visuals
     to enchance: 
     frame rate: for now speed of frame updates is fixed by GlobalConsts.frameDuration, 
     in future it should be also dependent on some time that differs with the car speed
-*/     
+*/
 
