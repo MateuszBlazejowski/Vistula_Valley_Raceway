@@ -161,7 +161,7 @@ namespace VVR.VVR_logic
         {
             int humanIndex = vehicles.FindIndex(v => v.isHuman == true);
             vehicles[humanIndex].positionY += (double)1;
-            if (vehicles[humanIndex].speed == 0) throw new Exception("wrong code, HUMANSPEED schould never be zero");
+            if (vehicles[humanIndex].speed <= 0) throw new Exception("wrong code, HUMANSPEED schould never be zero");
             for (int i = 0; i < vehicles.Count; i++)
             {
                 if (vehicles[i].isHuman == false)
@@ -357,6 +357,17 @@ namespace VVR.VVR_logic
                     break;
                 }
 
+                Console.SetCursorPosition(0, 23);
+                Console.Write($"{vehicles[0].positionY}     ");
+                Console.SetCursorPosition(0, 23);
+                Console.Write($"{vehicles[1].positionY}     ");
+                Console.SetCursorPosition(0, 24);
+                Console.Write($"{vehicles[2].positionY}     ");
+                Console.SetCursorPosition(0, 25);
+                Console.Write($"{vehicles[3].positionY}     ");
+                Console.SetCursorPosition(0, 26);
+                Console.Write($"{vehicles[4].positionY}     ");
+
                 renderReady.Set();
 
                 //int humanIndex = vehicles.FindIndex(v => v.isHuman == true);
@@ -366,6 +377,8 @@ namespace VVR.VVR_logic
                 //Console.SetCursorPosition(0, 24);
                 //Console.Write($"{vehicles[1].lapCounter}     ");
                 //Thread.Sleep(300);
+
+               
             }
             messages.PrintGameEndMessage(finnishedVehicles);
         }
