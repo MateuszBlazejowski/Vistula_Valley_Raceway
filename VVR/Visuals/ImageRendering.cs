@@ -60,6 +60,7 @@ namespace VVR.Visuals
 
         private void ChangeVehiclePosition(object? sender, VehicleMovingParametersChangedEventArgs e)
         {
+            
             vehicles[e.carIndex].positionX += e.deltaPosX; // changing posX by the delta
             vehicles[e.carIndex].speed += e.deltaSpeed;
         }
@@ -180,7 +181,6 @@ namespace VVR.Visuals
                         Console.BackgroundColor = this.bgColors[i, j];
                         Console.Write(frame[i, j]); // Write characters in place
                     }
-
                 }   
             }
             Console.ResetColor(); // Reset to default color
@@ -242,7 +242,7 @@ namespace VVR.Visuals
                 }
                 if (vehicles[i].positionY > track.trackPieces.Count)
                 {
-                    vehicles[i].positionY -= (track.trackPieces.Count+1);
+                    vehicles[i].positionY -= (track.trackPieces.Count +1);
                 }
             }
             humanPosition = (int)Math.Round(vehicles[humanIndex].positionY);
@@ -292,7 +292,7 @@ namespace VVR.Visuals
         public void Play()
         {
             messages.PrintGameStartMessage(trackColorScheme);
-            int startingRow =  track.trackPieces.Count - GlobalConsts.TRACKFRAMELENGTH/2 + GlobalConsts.DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING;
+            int startingRow = track.trackPieces.Count - GlobalConsts.TRACKFRAMELENGTH / 2 - (int)vehicles[humanIndex].positionY;
             for(int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++) // filling previous frame with ' ', necessary for the first execution of PrintFrame  
             {
                 for (int j = 0; j < GlobalConsts.TRACKFRAMELENGTH; j++)
@@ -327,7 +327,16 @@ namespace VVR.Visuals
                 WaitUntillTheFrameDurationPasses();
 
                 Console.SetCursorPosition(0, 22);
+                Console.Write($"{vehicles[0].positionY}     ");
+                Console.SetCursorPosition(0, 23);
                 Console.Write($"{vehicles[1].positionY}     ");
+                Console.SetCursorPosition(0, 24);
+                Console.Write($"{vehicles[2].positionY}     ");
+                Console.SetCursorPosition(0, 25);
+                Console.Write($"{vehicles[3].positionY}     ");
+                Console.SetCursorPosition(0, 26);
+                Console.Write($"{vehicles[4].positionY}     ");
+
 
             }
             //messages.PrintGameEndMessage(); 

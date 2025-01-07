@@ -19,18 +19,18 @@ namespace VVR
             // WARNING :
             // only one car can have true passed, as the game is singleplayer 
             List<Vehicle> vehicles = new List<Vehicle>();
-            Vehicle car1 = new Vehicle("you",ConsoleColor.DarkRed, ConsoleColor.Red, true, 20, 1 ,87);
+            Vehicle car1 = new Vehicle("you",ConsoleColor.DarkRed, ConsoleColor.Red, true, 20, 4 ,10);
             vehicles.Add(car1);
             Vehicle car2 = new Vehicle("AI_1", ConsoleColor.DarkMagenta, ConsoleColor.Yellow, false, 30, 2, 88);
             vehicles.Add(car2);
             Vehicle car3 = new Vehicle("AI_2", ConsoleColor.DarkMagenta, ConsoleColor.Yellow, false, 25, 3, 82);
             vehicles.Add(car3);
-            Vehicle car4 = new Vehicle("AI_3", ConsoleColor.DarkBlue, ConsoleColor.Yellow, false,40, 4, 85);
+            Vehicle car4 = new Vehicle("AI_3", ConsoleColor.DarkBlue, ConsoleColor.Yellow, false, 40,1, 85);
             vehicles.Add(car4);
-            Vehicle car5 = new Vehicle("AI_4", ConsoleColor.DarkBlue, ConsoleColor.Yellow, false, 15, 5, 75);
+            Vehicle car5 = new Vehicle("AI_4", ConsoleColor.DarkBlue, ConsoleColor.Yellow, false, 2, 5, 10);
             vehicles.Add(car5);
 
-            GameLogic gameLogic = new GameLogic(vehicles); //starting game logic 
+            GameLogic gameLogic = new GameLogic(vehicles); //starting game logic     
             ImageRendering imageRendering = new ImageRendering(gameLogic); //starting visuals
             gameLogic.CheckForKeyColorScheme(); //setting track color scheme
 
