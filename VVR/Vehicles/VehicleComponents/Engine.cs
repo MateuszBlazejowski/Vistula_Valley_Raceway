@@ -31,33 +31,33 @@ namespace VVR.Vehicles.VehicleComponents
         //calculated based on the above parameters
 
         //can be changed to be vertical and horizontal size
-        float size
+        public float size
         {
             get;
             set;
         }
 
         //max speed
-        float horsePower
+        public float horsePower
         {
             get;
             set;
         }
 
         //acceleration
-        float torque
+        public float torque
         {
             get;
             set;
         }
 
-        float reliability
+        public float reliability
         {
             get;
             set;
         }
 
-        float fuelconsumption
+        public float fuelconsumption
         {
             get;
             set;

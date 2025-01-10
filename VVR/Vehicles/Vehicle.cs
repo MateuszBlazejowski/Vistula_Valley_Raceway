@@ -10,6 +10,7 @@ namespace VVR.Vehicles
 {
     internal class Vehicle
     {
+        public float acceleration;//calculated from engine frame tyres and mass
         float mass;
         Engine engine;
         Frame frame;
@@ -36,6 +37,7 @@ namespace VVR.Vehicles
             tyresFront = new Tyres(_tireWearFront, _tireTypeFront);
             tyresBack = new Tyres(_tireWearBack, _tireTypeBack);
             mass = engine.engineWeight + frame.frameWeight;
+            acceleration = CalculateAcceleration();
 
         }
         public Vehicle(Engine _eng, Frame _frame, Tyres _tyresfront, Tyres _tyresBack)
@@ -45,9 +47,10 @@ namespace VVR.Vehicles
             tyresFront = _tyresfront;
             tyresBack = _tyresBack;
             mass = engine.engineWeight + frame.frameWeight;
+            acceleration = CalculateAcceleration();
         }
 
-        public Vehicle(string _id, ConsoleColor _bodyColor, ConsoleColor _roofTopColor, bool _isHuman, int posX, int startingPosition, double _speed)//constructor to test visuals 
+        public Vehicle(string _id, ConsoleColor _bodyColor, ConsoleColor _roofTopColor, bool _isHuman, int posX, int startingPosition, double _speed, float _acceleration = 1.0f)//constructor to test visuals 
         {
             isHuman = _isHuman;
             bodyColor = _bodyColor;
@@ -57,6 +60,7 @@ namespace VVR.Vehicles
             speed = _speed;
             isRaceFinished = false;
             id = _id;
+            acceleration = _acceleration;   
         }
 
         public void PrintVehicleInfo()
@@ -65,7 +69,12 @@ namespace VVR.Vehicles
             frame.PrintFrame();
             tyresFront.PrintTyres();
             tyresBack.PrintTyres();
-            Console.WriteLine($"The vehicle mass is {mass}");
+            Console.WriteLine($"Acceleration: {acceleration}\nThe vehicle mass is {mass}");
+        }
+
+        public float CalculateAcceleration()
+        {
+            return Math.Max(0.7f ,Math.Min((engine.horsePower + engine.torque) / mass + 0.5f, 1.5f));
         }
     }
 }

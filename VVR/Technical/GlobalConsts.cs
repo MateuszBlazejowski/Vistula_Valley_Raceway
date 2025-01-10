@@ -28,7 +28,7 @@ namespace VVR.Technical
         public const float FORCEDINDUCTIONFUELCONSUMPTION= 1.0f;
         public const float FORCEDINDUCTIONMASS = 20.0f;
         public const float DEFAULTFUELTANK = 60.0f;
-        public const float FRAMEWEIGHTCONST = 0.25f;
+        public const float FRAMEWEIGHTCONST = 1650.0f;
         public const int MAX_SPEED = 150;
         public const int MIN_SPEED = 30;
 

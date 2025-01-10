@@ -6,6 +6,7 @@ using VVR.Vehicles;
 using VVR.VVR_logic;
 using VVR.Technical;
 using VVR.TrackConverter;
+using System.Reflection.Metadata.Ecma335;
 
 namespace VVR
 {
@@ -15,18 +16,37 @@ namespace VVR
         {
             if (args.Length != 0)
             {
-                Console.WriteLine("Adding tracks to the game....");
-                try
+                if (args[0] == "debugEngine")
+                //c# doesnt store program name under args[0], so we expect to find the only argument there
                 {
-                    TrackConverter.Program.RunTrackConverter(args);
-                    Console.WriteLine("Track added successfully!");
+                    Console.WriteLine("Entering debug mode for engine components");
+                    Console.WriteLine("----------------Engine 1 info------------------");
+                    Vehicle vehicle1 = new Vehicle(4, 2.0f, 0.5f);
+                    vehicle1.PrintVehicleInfo();
+                    Console.WriteLine("----------------Engine 2 info------------------");
+                    Vehicle vehicle2 = new Vehicle(12, 4.0f, 1.3f);
+                    vehicle2.PrintVehicleInfo();
+                    Console.WriteLine("Press 1 if you want to launch the game!(any other input will close)");
+                    if(!(Console.ReadKey().Key == ConsoleKey.D1))
+                    {
+                        return;
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine($"Failed to add track: {ex.Message}");
-                }
+                    Console.WriteLine("Adding tracks to the game....");
+                    try
+                    {
+                        TrackConverter.Program.RunTrackConverter(args);
+                        Console.WriteLine("Track added successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to add track: {ex.Message}");
+                    }
 
-                return;
+                    return; 
+                }
             }
             // disabling winking from the cursor running around the console:
             Console.CursorVisible = false; 
@@ -35,7 +55,7 @@ namespace VVR
             // WARNING :
             // only one car can have true passed, as the game is singleplayer 
             List<Vehicle> vehicles = new List<Vehicle>();
-            Vehicle car1 = new Vehicle("you",ConsoleColor.DarkRed, ConsoleColor.Red, true, 20, 1 ,87);
+            Vehicle car1 = new Vehicle("you",ConsoleColor.DarkRed, ConsoleColor.Red, true, 20, 1 ,87, 2.0f);
             vehicles.Add(car1);
             Vehicle car2 = new Vehicle("AI_1", ConsoleColor.DarkMagenta, ConsoleColor.Yellow, false, 30, 2, 88);
             vehicles.Add(car2);
@@ -50,15 +70,15 @@ namespace VVR
             ImageRendering imageRendering = new ImageRendering(gameLogic); //starting visuals
             gameLogic.CheckForKeyColorScheme(); //setting track color scheme
 
-          //  VehicleVisual vehvis1 = new VehicleVisual(ConsoleColor.DarkRed, ConsoleColor.Red, true);
-          //  VehicleVisual vehvis2 = new VehicleVisual(ConsoleColor.DarkMagenta, ConsoleColor.Yellow , false);
-          //  imageRendering.vehicles.Add(vehvis1);
-          //  imageRendering.vehicles.Add(vehvis2);
+            //  VehicleVisual vehvis1 = new VehicleVisual(ConsoleColor.DarkRed, ConsoleColor.Red, true);
+            //  VehicleVisual vehvis2 = new VehicleVisual(ConsoleColor.DarkMagenta, ConsoleColor.Yellow , false);
+            //  imageRendering.vehicles.Add(vehvis1);
+            //  imageRendering.vehicles.Add(vehvis2);
 
             Thread imageRenderingThread = new Thread(imageRendering.Play); //play, new thread to allow simultaneous logic and play
             imageRenderingThread.Start();
 
-           
+
             gameLogic.StartGameLogic();
 
             imageRenderingThread.Join();
@@ -66,7 +86,7 @@ namespace VVR
             Engine eng = new Engine(4, 2.7f, Configuration.Flat, EngineType.Turbocharged);
             eng.PrintEngineStats();
 
-            Vehicle veh = new Vehicle(4 , 2.7f, 10);
+            Vehicle veh = new Vehicle(4, 2.7f, 10);
             veh.PrintVehicleInfo();
 
             Console.CursorVisible = true;
