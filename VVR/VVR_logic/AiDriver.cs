@@ -18,7 +18,7 @@ namespace VVR.VVR_logic
             if (vehicles[carIndex].positionY < 0) return;
             if (crashedIntoWall != 0)
             {
-                if (crashedIntoCar == -1)
+                if (crashedIntoWall == -1)
                     deltaPosX = 1;
                 else if (crashedIntoWall == 1)
                     deltaPosX = -1;
@@ -54,7 +54,7 @@ namespace VVR.VVR_logic
             else
             {
 
-                deltaSpeed = 1; // change to acceleration of current car
+                deltaSpeed = vehicles[carIndex].acceleration; // change to acceleration of current car
             }
 
             // last check 

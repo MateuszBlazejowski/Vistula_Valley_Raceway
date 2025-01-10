@@ -176,6 +176,7 @@ namespace VVR.Visuals
 
         private void PrintFrame(char[,] frame)
         {
+
             for (int j = 0; j < GlobalConsts.TRACKFRAMELENGTH; j++) // Loop through rows (frame height)
             {
                 Console.SetCursorPosition(0, j); // Move cursor to the start of each row
@@ -192,6 +193,10 @@ namespace VVR.Visuals
 
                 }
             }
+
+
+
+
             Console.ResetColor(); // Reset to default color
             Console.WriteLine();
             Console.WriteLine($"Your speeed: {vehicles[0].speed:F2}      ");

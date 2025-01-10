@@ -162,15 +162,19 @@ namespace VVR.VVR_logic
             {
                 int humanIndex = vehicles.FindIndex(v => v.isHuman == true);
                 int PosY = (int)Math.Round(vehicles[carIndex].positionY);
-                int predictedPosition = PosY + 2 * (int)Math.Round((vehicles[carIndex].speed / vehicles[humanIndex].speed));
+                int predictedPosition = PosY + 3 * (int)Math.Round((vehicles[carIndex].speed / vehicles[humanIndex].speed));
 
-                if (predictedPosition > track.trackPieces.Count)
-                {
-                    predictedPosition -= (track.trackPieces.Count + 1);
-                }
-                predictedPosition = (track.trackPieces.Count + track.trackPieces.Count - predictedPosition) % track.trackPieces.Count;
+                //if (predictedPosition > track.trackPieces.Count)
+                //{
+                //    predictedPosition -= (track.trackPieces.Count + 1);
+                //}
+                //predictedPosition = (track.trackPieces.Count + track.trackPieces.Count - predictedPosition) % track.trackPieces.Count;
 
                 int crashedIntoWallReturn = CrashedIntoWall(carIndex, predictedPosition);
+                if (crashedIntoWallReturn != 0)
+                {
+                   
+                }
                 int crashedIntoCarReturn = 0;
 
                 int aiPosY;
@@ -180,7 +184,7 @@ namespace VVR.VVR_logic
                     if (i == carIndex) continue;
 
                     aiPosY = (int)Math.Round(vehicles[i].positionY);
-                    aiPredictedPosition = PosY + 2 * (int)Math.Round((vehicles[i].speed / vehicles[humanIndex].speed));
+                    aiPredictedPosition = aiPosY + 2 * (int)Math.Round((vehicles[i].speed / vehicles[humanIndex].speed));
 
                     if (aiPredictedPosition > track.trackPieces.Count)
                     {
@@ -188,7 +192,7 @@ namespace VVR.VVR_logic
                     }
                     aiPredictedPosition = (track.trackPieces.Count + track.trackPieces.Count - aiPredictedPosition) % track.trackPieces.Count;
 
-                    // crashedIntoCarReturn = CrashedIntoCar(carIndex,i,predictedPosition,aiPredictedPosition);
+                    crashedIntoCarReturn = CrashedIntoCar(carIndex,i,predictedPosition,aiPredictedPosition);
                     if (crashedIntoCarReturn != 0) break;
 
                 }
@@ -224,7 +228,12 @@ namespace VVR.VVR_logic
             //if player already at minimum speed no need to slow them down
             if (vehicles[carIndex].speed > GlobalConsts.MIN_SPEED)
             {
-                deltaSpeed = -(3 * (float)vehicles[carIndex].speed / 4);
+                deltaSpeed = -(2 * (float)vehicles[carIndex].speed / 4);
+                if ((vehicles[carIndex].speed + deltaSpeed) < GlobalConsts.MIN_SPEED)
+                {
+                    deltaSpeed = (float)((double)GlobalConsts.MIN_SPEED - vehicles[carIndex].speed); 
+                }
+
             }
 
             VehicleMovingParametersChanged?.Invoke(this,

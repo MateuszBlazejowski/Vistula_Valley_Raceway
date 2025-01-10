@@ -49,12 +49,22 @@ namespace VVR.Locations
             trackPieces.Add(new TrackPiece(7, 57, '\\', '\\'));
             trackPieces.Add(new TrackPiece(8, 58, '\\', '\\'));
             trackPieces.Add(new TrackPiece(9, 59, '\\', '\\'));
-            trackPieces.Add(new TrackPiece(10, 60, '|', '|'));
-            trackPieces.Add(new TrackPiece(10, 60, '|', '|'));
-            trackPieces.Add(new TrackPiece(10, 60, '|', '|'));
-            trackPieces.Add(new TrackPiece(10, 60, '|', '|'));
-            trackPieces.Add(new TrackPiece(10, 60, '|', '|'));
-            trackPieces.Add(new TrackPiece(10, 60, '|', '|'));
+            for (int left = 10; left < 49; left++)
+            {
+                trackPieces.Add(new TrackPiece(left, left + 50, '\\', '\\'));
+            }
+            trackPieces.Add(new TrackPiece(49, 99, '|', '|'));
+            trackPieces.Add(new TrackPiece(49, 99, '|', '|'));
+            trackPieces.Add(new TrackPiece(49, 99, '|', '|'));
+            trackPieces.Add(new TrackPiece(49, 99, '|', '|'));
+            trackPieces.Add(new TrackPiece(49, 99, '|', '|'));
+            trackPieces.Add(new TrackPiece(49, 99, '|', '|'));
+            trackPieces.Add(new TrackPiece(49, 99, '|', '|'));
+            trackPieces.Add(new TrackPiece(49, 99, '|', '|'));
+            for (int left = 48; left >= 10; left--)
+            {
+                trackPieces.Add(new TrackPiece(left, left + 50, '/', '/'));
+            }
             trackPieces.Add(new TrackPiece(9, 59, '/', '/'));
             trackPieces.Add(new TrackPiece(8, 58, '/', '/'));
             trackPieces.Add(new TrackPiece(7, 57, '/', '/'));
