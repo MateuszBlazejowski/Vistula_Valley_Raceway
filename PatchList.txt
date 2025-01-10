@@ -6,7 +6,7 @@ Patch Date: 10.01.25
 Patch Title: Car configurator!
 
 ->fixed acceleration bug, where players either couldn't reach max speed or went faster than max speed
-->added car configurator, (engine only, frame and more engine options comming soon)
+->added car configurator, (engine only, frame and more engine options coming soon)
 ->fixed displaying player speed, now limited to 2 decimal places for readability
 
 ------------------Patch 0.1 END--------------
