@@ -37,7 +37,7 @@ namespace VVR
             List<Vehicle> vehicles = new List<Vehicle>();
             Vehicle car1 = new Vehicle("you",ConsoleColor.DarkRed, ConsoleColor.Red, true, 20, 1 ,87);
             vehicles.Add(car1);
-            Vehicle car2 = new Vehicle("AI_1", ConsoleColor.DarkMagenta, ConsoleColor.Yellow, false, 30, 2, 88);
+            Vehicle car2 = new Vehicle("AI_1", ConsoleColor.DarkMagenta, ConsoleColor.Yellow, false, 5, 2, 88);
             vehicles.Add(car2);
             Vehicle car3 = new Vehicle("AI_2", ConsoleColor.DarkMagenta, ConsoleColor.Yellow, false, 25, 3, 82);
             vehicles.Add(car3);

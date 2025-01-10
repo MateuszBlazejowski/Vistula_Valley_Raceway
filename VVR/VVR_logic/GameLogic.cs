@@ -58,6 +58,7 @@ namespace VVR.VVR_logic
         public List<VehicleVisual> vehiclesVisual = new List<VehicleVisual>();
         public List<Vehicle> finnishedVehicles = new List<Vehicle>();
         public Track track = new Track();
+        public DrivingSystem drivingSystem = new DrivingSystem();
 
         public ManualResetEvent logicReady = new ManualResetEvent(false);
         public ManualResetEvent renderReady = new ManualResetEvent(false);
@@ -65,6 +66,8 @@ namespace VVR.VVR_logic
         private bool isRunning = true;
         private ConsoleKey? lastKeyPressed = null;
         private bool keyProcessed = true;
+        public int humanIndex; 
+
 
         public GameLogic(List<Vehicle> _vehicles)
         {
@@ -150,8 +153,39 @@ namespace VVR.VVR_logic
             int deltaPosX = 0;
             if (!vehicles[carIndex].isHuman == true)
             {
-                AiDriver driver = new AiDriver();
-                driver.Drive(carIndex, ref deltaPosX, ref deltaSpeed, track, vehicles);
+                int humanIndex = vehicles.FindIndex(v => v.isHuman == true);
+                int PosY = (int)Math.Round(vehicles[carIndex].positionY);
+                int predictedPosition = PosY + 2 * (int)Math.Round((vehicles[carIndex].speed / vehicles[humanIndex].speed));
+
+                if (predictedPosition > track.trackPieces.Count)
+                {
+                    predictedPosition -= (track.trackPieces.Count + 1);
+                }
+                predictedPosition = (track.trackPieces.Count + track.trackPieces.Count - predictedPosition) % track.trackPieces.Count;
+
+                int crashedIntoWallReturn = CrashedIntoWall(carIndex, predictedPosition);
+                int crashedIntoCarReturn = 0;
+
+                int aiPosY;
+                int aiPredictedPosition = 0;
+                for (int i = 0; i < vehicles.Count; i++) // checking if we crashed with any other car in the next iteration(predicted position)
+                {
+                    if (i == carIndex) continue;
+
+                    aiPosY = (int)Math.Round(vehicles[i].positionY);
+                    aiPredictedPosition = PosY + 2 * (int)Math.Round((vehicles[i].speed / vehicles[humanIndex].speed));
+
+                    if (aiPredictedPosition > track.trackPieces.Count)
+                    {
+                        aiPredictedPosition -= (track.trackPieces.Count + 1);
+                    }
+                    aiPredictedPosition = (track.trackPieces.Count + track.trackPieces.Count - aiPredictedPosition) % track.trackPieces.Count;
+
+                    // crashedIntoCarReturn = CrashedIntoCar(carIndex,i,predictedPosition,aiPredictedPosition);
+                    if (crashedIntoCarReturn != 0) break;
+
+                }
+                drivingSystem.Drive(carIndex, ref deltaPosX, ref deltaSpeed, track, vehicles, crashedIntoWallReturn, crashedIntoCarReturn);
             }
             VehicleMovingParametersChanged?.Invoke(this, new VehicleMovingParametersChangedEventArgs(deltaPosX, deltaSpeed, carIndex, false));
             vehicles[carIndex].positionX += deltaPosX;
@@ -159,7 +193,6 @@ namespace VVR.VVR_logic
         }
         private void updateCarPositionY()
         {
-            int humanIndex = vehicles.FindIndex(v => v.isHuman == true);
             vehicles[humanIndex].positionY += (double)1;
             if (vehicles[humanIndex].speed == 0) throw new Exception("wrong code, HUMANSPEED schould never be zero");
             for (int i = 0; i < vehicles.Count; i++)
@@ -305,7 +338,7 @@ namespace VVR.VVR_logic
                     {
                         Console.WriteLine("Crashed into AI!");
                         BanishToMiddle(i, Yposition);
-                        //Thread.Sleep(300);
+                       
                     }
                 }
             }
@@ -337,14 +370,14 @@ namespace VVR.VVR_logic
         }
         public void StartGameLogic()
         {
-
+            humanIndex = vehicles.FindIndex(v => v.isHuman == true);
             StartKeyListener();
             while (true)
             {
                 logicReady.WaitOne(); // Wait for rendering thread to be ready
                 logicReady.Reset();   // Reset for the next iteration
 
-                for (int i = 0; i < vehicles.Count; i++)
+                for (int i = 0; i < vehicles.Count; i++) // every ai makes a move 
                 {
                     VehicleMoved(i);
                 }
