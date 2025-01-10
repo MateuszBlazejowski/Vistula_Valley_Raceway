@@ -11,11 +11,11 @@ namespace VVR.Vehicles
     internal class Vehicle
     {
         public float acceleration;//calculated from engine frame tyres and mass
-        float mass;
-        Engine engine;
-        Frame frame;
-        Tyres tyresFront;
-        Tyres tyresBack;
+        public float mass;
+        public Engine engine;
+        public Frame frame;
+        public Tyres tyresFront;
+        public Tyres tyresBack;
 
         public bool isRaceFinished; 
         public int startingPosition;

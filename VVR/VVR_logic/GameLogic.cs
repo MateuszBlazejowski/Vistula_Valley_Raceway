@@ -101,9 +101,16 @@ namespace VVR.VVR_logic
                             {
                                 deltaPosX++;
                             }
-                            else if (lastKeyPressed == ConsoleKey.UpArrow && (vehicles[carIndex].speed + vehicles[carIndex].acceleration )<= GlobalConsts.MAX_SPEED)
+                            else if (lastKeyPressed == ConsoleKey.UpArrow && vehicles[carIndex].speed < GlobalConsts.MAX_SPEED)
                             {
-                                deltaSpeed+=vehicles[carIndex].acceleration;
+                                if (vehicles[carIndex].speed + vehicles[carIndex].acceleration >= GlobalConsts.MAX_SPEED)
+                                {
+                                    deltaSpeed += GlobalConsts.MAX_SPEED - (float)vehicles[carIndex].speed;
+                                }
+                                else
+                                {
+                                    deltaSpeed += vehicles[carIndex].acceleration;
+                                }
                             }
                             else if (lastKeyPressed == ConsoleKey.DownArrow && vehicles[carIndex].speed > GlobalConsts.MIN_SPEED)
                             {
