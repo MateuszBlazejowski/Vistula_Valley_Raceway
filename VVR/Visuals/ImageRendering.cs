@@ -301,7 +301,7 @@ namespace VVR.Visuals
         public void Play()
         {
             messages.PrintGameStartMessage(trackColorScheme);
-            int startingRow = track.trackPieces.Count - GlobalConsts.TRACKFRAMELENGTH / 2 + GlobalConsts.DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING;
+            int startingRow = track.trackPieces.Count - GlobalConsts.TRACKFRAMELENGTH / 2 - (int)vehicles[humanIndex].positionY;
             for (int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++) // filling previous frame with ' ', necessary for the first execution of PrintFrame  
             {
                 for (int j = 0; j < GlobalConsts.TRACKFRAMELENGTH; j++)
