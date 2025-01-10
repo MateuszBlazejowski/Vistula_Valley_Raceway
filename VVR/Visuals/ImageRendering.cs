@@ -336,7 +336,7 @@ namespace VVR.Visuals
                 WaitUntillTheFrameDurationPasses();
 
                 Console.SetCursorPosition(0, 22);
-                Console.Write($"{vehicles[1].positionY}     ");
+                Console.Write($"{vehicles[0].positionY}     ");
 
             }
             //messages.PrintGameEndMessage(); 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VVR": {
+      "commandName": "Project",
+      "commandLineArgs": "debugEngine"
+    }
+  }
+}

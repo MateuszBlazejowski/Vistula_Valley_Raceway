@@ -34,6 +34,8 @@ namespace VVR.Vehicles.VehicleComponents
         {
             maxEnigneSize = _maxEngineSize;
             frameWeight = CalculateFrameWeight(maxEnigneSize);
+            fuelTankSize = _fuelTankSize;
+            currentFuel = _currentFuel;
         }
 
         public void PrintFrame()
