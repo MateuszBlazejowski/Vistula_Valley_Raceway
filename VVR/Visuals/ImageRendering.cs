@@ -194,7 +194,7 @@ namespace VVR.Visuals
             }
             Console.ResetColor(); // Reset to default color
             Console.WriteLine();
-            Console.WriteLine($"Your speeed: {vehicles[0].speed}      ");
+            Console.WriteLine($"Your speeed: {vehicles[0].speed:F2}      ");
 
             for (int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++)
             {
