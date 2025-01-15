@@ -41,7 +41,7 @@ namespace VVR.Visuals
 
         private ManualResetEvent logicReady;
         private ManualResetEvent renderReady;
-        public ImageRendering(GameLogic gameLogic)
+        public ImageRendering(GameLogic gameLogic, GameSetup gameSetup)
         {
             track = gameLogic.track;
             vehicles = gameLogic.vehiclesVisual;
@@ -54,7 +54,7 @@ namespace VVR.Visuals
             this.renderReady = gameLogic.renderReady;
 
             gameLogic.VehicleMovingParametersChanged += ChangeVehiclePosition;
-            gameLogic.ColorSchemeSet += SetColorScheme;
+            gameSetup.ColorSchemeSet += SetColorScheme;
             gameLogic.TechnicalMessage += TechnicalMessageHandler;
         }
 
@@ -339,19 +339,8 @@ namespace VVR.Visuals
                 if (startingRow < 0) startingRow = track.trackPieces.Count; // looping the straight track 
 
                 WaitUntillTheFrameDurationPasses();
-
-                Console.SetCursorPosition(0, 22);
-                Console.Write($"{vehicles[0].positionY}     ");
-
             }
-            //messages.PrintGameEndMessage(); 
         }
     }
 }
-
-/*
-    to enchance: 
-    frame rate: for now speed of frame updates is fixed by GlobalConsts.frameDuration, 
-    in future it should be also dependent on some time that differs with the car speed
-*/
 
