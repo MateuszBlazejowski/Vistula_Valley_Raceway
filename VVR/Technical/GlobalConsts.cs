@@ -29,13 +29,16 @@ namespace VVR.Technical
         public const float FORCEDINDUCTIONMASS = 20.0f;
         public const float DEFAULTFUELTANK = 60.0f;
         public const float FRAMEWEIGHTCONST = 1650.0f;
+
+        public const int STARTING_SPEED = 80;
         public const int MAX_SPEED = 100;
         public const int MIN_SPEED = 30;
 
-        public const string GAME_FINISHED_MESSAGE = "END";
 
-        public const int RACE_IN_LAPS = 5;
-        public const int DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING = 3;  
+        public const string GAME_FINISHED_MESSAGE = "END"; // should be put in ScreenMessages.cs later
+
+        public const int DEFAULT_DISTANCE_BETWEEN_CARS_AT_THE_BEGGINING = 4;  
+        public const int DOUBLE_STARTING_LINE_WIDTH = 10;
         
 
         // visual constants:  
@@ -48,7 +51,13 @@ namespace VVR.Technical
         public static readonly ConsoleColor[] RainbowTrackColors = { ConsoleColor.Red, ConsoleColor.DarkYellow /*kind of orange*/, ConsoleColor.Yellow, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.DarkBlue, ConsoleColor.DarkMagenta }; // red orange yellow green blue darkblue purple  
         public static readonly ConsoleColor[] BeachTrackColors = {ConsoleColor.Yellow, ConsoleColor.Blue };
         public static readonly ConsoleColor[] HelloKittyTrackColors = { ConsoleColor.Magenta/*kind of pink*/, ConsoleColor.White };
-        public static readonly TimeSpan frameDuration = TimeSpan.FromMilliseconds(37); 
+        public static readonly TimeSpan frameDuration = TimeSpan.FromMilliseconds(37);
+
+
+        // user defined: 
+
+        public static int RACE_IN_LAPS = 5; 
+        public static float DifficultyLevelMultiplier = 1.05f; // the higher, the easier for human driver, max speed for them is ai max speed multiplied by this
     }
 }
  

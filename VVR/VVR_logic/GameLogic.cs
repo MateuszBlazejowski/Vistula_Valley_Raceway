@@ -13,15 +13,6 @@ using VVR.Technical;
 namespace VVR.VVR_logic
 {
 
-
-    public class TrackColorSchemeSetEventArgs : EventArgs
-    {
-        public ConsoleKey KeyPressed { get; }
-        public TrackColorSchemeSetEventArgs(ConsoleKey keyPressed)
-        {
-            KeyPressed = keyPressed;
-        }
-    }
     public class VehicleMovingParametersChangedEventArgs : EventArgs
     {
         public int deltaPosX;
@@ -40,7 +31,7 @@ namespace VVR.VVR_logic
     public class TechnicalMessageEventArgs : EventArgs
     {
         public string message;
-        public TechnicalMessageEventArgs(string _message) // posX should be only -1, 0 or +1, representing change in posX, speed 
+        public TechnicalMessageEventArgs(string _message) 
         {
             message = _message;
         }
@@ -48,7 +39,6 @@ namespace VVR.VVR_logic
     internal class GameLogic
     {
 
-        public event EventHandler<TrackColorSchemeSetEventArgs> ColorSchemeSet;
         public event EventHandler<VehicleMovingParametersChangedEventArgs> VehicleMovingParametersChanged;
         public event EventHandler<TechnicalMessageEventArgs> TechnicalMessage;
         // Method to check for key input
@@ -79,7 +69,13 @@ namespace VVR.VVR_logic
                 vehiclesVisual.Add(car);
             }
             finnishedVehicles.Clear();
+            // Initialize events to avoid null values
+            VehicleMovingParametersChanged += (sender, e) => { };
+            TechnicalMessage += (sender, e) => { };
         }
+
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(int vKey); // Declare GetAsyncKeyState
         public void StartKeyListener()
         {
             Thread inputThread = new Thread(() =>
@@ -87,72 +83,45 @@ namespace VVR.VVR_logic
                 int carIndex = vehicles.FindIndex(v => v.isHuman == true);
                 int deltaPosX = 0;
                 float deltaSpeed = 0;
-                //int iterations = 0;
+                int humanMaxSpeed;
                 while (true)
                 {
-
-                    if (Console.KeyAvailable)
-                    {
-                        lastKeyPressed = Console.ReadKey(intercept: true).Key;
-                        if (lastKeyPressed.HasValue)
-                        {
-                            if (lastKeyPressed == ConsoleKey.LeftArrow)
-                            {
-                                deltaPosX--;
-                            }
-                            else if (lastKeyPressed == ConsoleKey.RightArrow)
-                            {
-                                deltaPosX++;
-                            }
-                            else if (lastKeyPressed == ConsoleKey.UpArrow && vehicles[carIndex].speed < GlobalConsts.MAX_SPEED)
-                            {
-                                if (vehicles[carIndex].speed + vehicles[carIndex].acceleration >= GlobalConsts.MAX_SPEED)
-                                {
-                                    deltaSpeed += GlobalConsts.MAX_SPEED - (float)vehicles[carIndex].speed;
-                                }
-                                else
-                                {
-                                    deltaSpeed += vehicles[carIndex].acceleration;
-                                }
-                            }
-                            else if (lastKeyPressed == ConsoleKey.DownArrow && vehicles[carIndex].speed > GlobalConsts.MIN_SPEED)
-                            {
-                                deltaSpeed--;
-                            }
-                            keyProcessed = true; // Mark key as processed
-                        }
-                        VehicleMovingParametersChanged?.Invoke(this, new VehicleMovingParametersChangedEventArgs(deltaPosX, deltaSpeed, carIndex, false));
-                        vehicles[carIndex].positionX += deltaPosX;
-                        vehicles[carIndex].speed += deltaSpeed;
-                    }
+                    // Reset changes for each iteration
                     deltaPosX = 0;
                     deltaSpeed = 0;
-                    Thread.Sleep(10); // Prevent high CPU usage
+                    humanMaxSpeed = (int)((float)GlobalConsts.MAX_SPEED * GlobalConsts.DifficultyLevelMultiplier);
+                    // Check if LeftArrow is pressed 
+                    if ((GetAsyncKeyState((int)ConsoleKey.LeftArrow) & 0x8000) != 0)
+                    {
+                        deltaPosX = -1;
+                    }
+                    // Check if RightArrow is pressed
+                    if ((GetAsyncKeyState((int)ConsoleKey.RightArrow) & 0x8000) != 0)
+                    {
+                        deltaPosX = 1;
+                    }
+                    // Check if UpArrow is pressed (accelerate)
+                    if ((GetAsyncKeyState((int)ConsoleKey.UpArrow) & 0x8000) != 0 && vehicles[carIndex].speed < humanMaxSpeed)
+                    {
+                        deltaSpeed = Math.Min(vehicles[carIndex].acceleration, humanMaxSpeed - (float)vehicles[carIndex].speed);
+                    }
+                    // Check if DownArrow is pressed (brake)
+                    if ((GetAsyncKeyState((int)ConsoleKey.DownArrow) & 0x8000) != 0 && vehicles[carIndex].speed > GlobalConsts.MIN_SPEED)
+                    {
+                        deltaSpeed = -2;
+                    }
+
+                    // Apply changes to the vehicle
+                    VehicleMovingParametersChanged?.Invoke(this, new VehicleMovingParametersChangedEventArgs(deltaPosX, deltaSpeed, carIndex, false));
+                    vehicles[carIndex].positionX += deltaPosX;
+                    vehicles[carIndex].speed += deltaSpeed;
+
+                    Thread.Sleep(50); // Prevent high CPU usage
                 }
             });
+
             inputThread.IsBackground = true;
             inputThread.Start();
-        }
-
-        public void CheckForKeyColorScheme()
-        {
-            while (true)
-            {
-                messages.PrintChooseTrackColorSchemeMessage();
-                ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
-
-
-                if (keyInfo.Key != ConsoleKey.D1 && keyInfo.Key != ConsoleKey.D2 && keyInfo.Key != ConsoleKey.D3 && keyInfo.Key != ConsoleKey.D4)
-                {
-                    messages.PrintInvalidInputMessage();
-                    continue;
-                }
-                else
-                {
-                    ColorSchemeSet?.Invoke(this, new TrackColorSchemeSetEventArgs(keyInfo.Key));
-                    break;
-                }
-            }
         }
         public void VehicleMoved(int carIndex)
         {
@@ -163,12 +132,6 @@ namespace VVR.VVR_logic
                 int humanIndex = vehicles.FindIndex(v => v.isHuman == true);
                 int PosY = (int)Math.Round(vehicles[carIndex].positionY);
                 int predictedPosition = PosY + 3 * (int)Math.Round((vehicles[carIndex].speed / vehicles[humanIndex].speed));
-
-                //if (predictedPosition > track.trackPieces.Count)
-                //{
-                //    predictedPosition -= (track.trackPieces.Count + 1);
-                //}
-                //predictedPosition = (track.trackPieces.Count + track.trackPieces.Count - predictedPosition) % track.trackPieces.Count;
 
                 int crashedIntoWallReturn = CrashedIntoWall(carIndex, predictedPosition);
                 if (crashedIntoWallReturn != 0)
@@ -222,8 +185,16 @@ namespace VVR.VVR_logic
 
         private void BanishToMiddle(int carIndex, int Yposition)
         {
-            int newX = (track.trackPieces[track.trackPieces.Count - Yposition].rightBorder
-                        + track.trackPieces[track.trackPieces.Count - Yposition].leftBorder) / 2;
+            int newX;
+            if (track.trackPieces.Count - Yposition >= 0 || track.trackPieces.Count - Yposition < track.trackPieces.Count)
+            {
+                newX = (track.trackPieces[track.trackPieces.Count - Yposition].rightBorder
+                            + track.trackPieces[track.trackPieces.Count - Yposition].leftBorder) / 2;
+            }
+            else
+            {
+                newX = 30;
+            }
             float deltaSpeed = 0;
             //if player already at minimum speed no need to slow them down
             if (vehicles[carIndex].speed > GlobalConsts.MIN_SPEED)
@@ -341,6 +312,8 @@ namespace VVR.VVR_logic
             {
                 //calculating where the vehicle is
                 int Yposition = (int)Math.Round(vehicles[i].positionY);
+                if (Yposition < 0)
+                    { continue; }
                 if (CrashedIntoWall(i, Yposition) == -1 || CrashedIntoWall(i, Yposition) == 1)
                 {
                     Console.WriteLine("You crashed!");
