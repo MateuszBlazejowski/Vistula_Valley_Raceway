@@ -8,19 +8,19 @@ using VVR.Technical;
 namespace VVR.Vehicles.VehicleComponents
 {
 
-    enum Configuration
+    public enum Configuration
     {
         Inline,//+++reliability
         Flat,//+++bonus to handling -reliability
         V,//each cylinder in this config brings up the size less than in other configs but is heavier
     }
-    enum EngineType
+    public enum EngineType
     {
         NaturallyAspirated,//+reliability
         Turbocharged,//++power +weight -reliability takes up sapce
         Supercharged,//+power +torque ++weight -reliability takes up space
     }
-    internal class Engine
+    public class Engine
     {
         int cylinderAmmount;//^ = +hp +fuelcons +size +weight -reliability 
         float displacement;//^ = +hp +torque +fuelcons +size +weight
