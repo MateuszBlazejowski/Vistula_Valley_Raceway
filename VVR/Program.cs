@@ -22,7 +22,6 @@ namespace VVR
                 if (determiner) return;
             }
 
-
             List<Vehicle> vehicles = gameSetup.SetGameVariables(); // setting everything like number of cars in the race etc. 
 
             GameLogic gameLogic = new GameLogic(vehicles); //starting game logic 

@@ -10,7 +10,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace VVR.Technical
 {
-        public class TrackColorSchemeSetEventArgs : EventArgs
+    public class TrackColorSchemeSetEventArgs : EventArgs
     {
         public ConsoleKey KeyPressed { get; }
         public TrackColorSchemeSetEventArgs(ConsoleKey keyPressed)
@@ -20,8 +20,8 @@ namespace VVR.Technical
     }
     public class GameSetup
     {
-        
-        
+
+
         public event EventHandler<TrackColorSchemeSetEventArgs> ColorSchemeSet;
         ScreenMessages messages = new ScreenMessages();
 
@@ -115,7 +115,7 @@ namespace VVR.Technical
                 Console.WriteLine("Invalid number format. Will use default difficulty: Intermediate");
                 difficulty = 2;
             }
-            if ( difficulty < 0 || difficulty > 5)
+            if (difficulty < 0 || difficulty > 5)
             {
                 Console.WriteLine("Invalid number. Will use default difficulty: Intermediate");
                 difficulty = 2;
@@ -146,7 +146,7 @@ namespace VVR.Technical
             Console.WriteLine($"You have chosen difficulty: {difficultyName}");
             Console.WriteLine();
 
-            Console.WriteLine("Type how many laps you want your race to last:  (recomended: 5 - 15)");
+            Console.WriteLine("Type how many laps you want your race to last(from 0 to 10):  (recomended: 5 - 10)");
             string? lapsInput = Console.ReadLine();
             int laps;
             if (!int.TryParse(lapsInput, out laps))
@@ -154,14 +154,14 @@ namespace VVR.Technical
                 Console.WriteLine("Invalid number format. Will set the race to take 5 laps");
                 laps = 5;
             }
-            if (laps<0)
+            if (laps < 0 || laps > 10)
             {
                 Console.WriteLine("Invalid number. Will set the race to take 5 laps");
                 laps = 5;
             }
             GlobalConsts.RACE_IN_LAPS = laps;
             Console.WriteLine();
-            
+
             Console.WriteLine("Type how many opponents do you want: (from 0 to 4)");
             string? opponentsNumInput = Console.ReadLine();
             int opponentsNum;
@@ -187,7 +187,7 @@ namespace VVR.Technical
                 Console.WriteLine("Invalid position format. Will set it to 1");
                 startingPos = 1;
             }
-            if (startingPos < 1 || startingPos > (opponentsNum+1))
+            if (startingPos < 1 || startingPos > (opponentsNum + 1))
             {
                 Console.WriteLine("Invalid position. Will set it to 1");
                 startingPos = 1;
@@ -200,7 +200,7 @@ namespace VVR.Technical
             Console.ReadKey();
             Console.Clear();
 
-            
+
             List<Vehicle> vehicles = new List<Vehicle>();
 
             // speed in m/s, one track piece is 3m and one car is 4.5m   
@@ -230,7 +230,7 @@ namespace VVR.Technical
             }
             return vehicles;
         }
-    
+
         private int StartingPosXCalculator(int startingPos)
         {
             if (startingPos % 2 == 1)
@@ -239,7 +239,7 @@ namespace VVR.Technical
             }
             else
             {
-            return selectedTrackWidthAtTheStart / 2 + GlobalConsts.DOUBLE_STARTING_LINE_WIDTH / 2;
+                return selectedTrackWidthAtTheStart / 2 + GlobalConsts.DOUBLE_STARTING_LINE_WIDTH / 2;
             }
         }
     }

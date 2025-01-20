@@ -339,6 +339,7 @@ namespace VVR.Visuals
                 if (startingRow < 0) startingRow = track.trackPieces.Count; // looping the straight track 
 
                 WaitUntillTheFrameDurationPasses();
+               
             }
         }
     }
