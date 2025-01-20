@@ -101,7 +101,7 @@ namespace VVR.Technical
             Console.WriteLine("Choose difficulty level:");
             Console.WriteLine();
 
-            Console.WriteLine("Absoulte computer drivers abomination: type 0");
+            Console.WriteLine("Demonstration: Type 0");
             Console.WriteLine("Begginer: Type 1");
             Console.WriteLine("Intermediate: Type 2");
             Console.WriteLine("Advanced: Type 3");

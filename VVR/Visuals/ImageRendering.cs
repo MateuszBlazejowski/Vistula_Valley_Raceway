@@ -80,23 +80,16 @@ namespace VVR.Visuals
         }
         private void SetColorScheme(object? sender, TrackColorSchemeSetEventArgs e)
         {
-            if (e.KeyPressed == ConsoleKey.D1)
+            trackColorScheme = e.KeyPressed switch
             {
-                trackColorScheme = GlobalConsts.DefaultTrackColors;
-            }
-            else if (e.KeyPressed == ConsoleKey.D2)
-            {
-                trackColorScheme = GlobalConsts.RainbowTrackColors;
-            }
-            else if (e.KeyPressed == ConsoleKey.D3)
-            {
-                trackColorScheme = GlobalConsts.BeachTrackColors;
-            }
-            else if (e.KeyPressed == ConsoleKey.D4)
-            {
-                trackColorScheme = GlobalConsts.HelloKittyTrackColors;
-            }
+                ConsoleKey.D1 => GlobalConsts.DefaultTrackColors,
+                ConsoleKey.D2 => GlobalConsts.RainbowTrackColors,
+                ConsoleKey.D3 => GlobalConsts.BeachTrackColors,
+                ConsoleKey.D4 => GlobalConsts.HelloKittyTrackColors,
+                _ => GlobalConsts.DefaultTrackColors,
+            };
         }
+
         private void RenderTrackFrame(int startingRow)
         {
             for (int i = 0; i < GlobalConsts.MAXTRACKWIDTH; i++)
