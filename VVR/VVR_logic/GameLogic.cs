@@ -316,7 +316,7 @@ namespace VVR.VVR_logic
                     { continue; }
                 if (CrashedIntoWall(i, Yposition) == -1 || CrashedIntoWall(i, Yposition) == 1)
                 {
-                    Console.WriteLine("You crashed!");
+                    //Console.WriteLine("You crashed!");
                     BanishToMiddle(i, Yposition);
                 }
 
@@ -325,7 +325,7 @@ namespace VVR.VVR_logic
                     int AIpositionY = (int)Math.Round(vehicles[j].positionY);
                     if (CrashedIntoCar(i, j, Yposition, AIpositionY) != 0)
                     {
-                        Console.WriteLine("Crashed into AI!");
+                        //Console.WriteLine("Crashed into AI!");
                         BanishToMiddle(i, Yposition);
                        
                     }
