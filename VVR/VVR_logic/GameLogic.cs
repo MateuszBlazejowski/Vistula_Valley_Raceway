@@ -381,14 +381,6 @@ namespace VVR.VVR_logic
                 Console.SetCursorPosition(0, GlobalConsts.TRACKFRAMELENGTH + 3);
                 Console.Write($"LAP :{vehicles[humanIndex].lapCounter+1}");
                 renderReady.Set();
-
-                //int humanIndex = vehicles.FindIndex(v => v.isHuman == true);
-                //Thread.Sleep(100);
-                //Console.SetCursorPosition(0, 23);
-                //Console.Write($"{vehicles[1].positionY}     ");
-                //Console.SetCursorPosition(0, 24);
-                //Console.Write($"{vehicles[1].lapCounter}     ");
-                //Thread.Sleep(300);
             }
             messages.PrintGameEndMessage(finnishedVehicles);
         }

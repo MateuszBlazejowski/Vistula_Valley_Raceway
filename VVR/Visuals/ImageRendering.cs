@@ -41,6 +41,8 @@ namespace VVR.Visuals
 
         private ManualResetEvent logicReady;
         private ManualResetEvent renderReady;
+
+        private GameLogic gameLogicReference;
         public ImageRendering(GameLogic gameLogic, GameSetup gameSetup)
         {
             track = gameLogic.track;
@@ -52,6 +54,8 @@ namespace VVR.Visuals
 
             this.logicReady = gameLogic.logicReady;
             this.renderReady = gameLogic.renderReady;
+            this.gameLogicReference = gameLogic;
+            this.trackColorScheme = GlobalConsts.DefaultTrackColors;
 
             gameLogic.VehicleMovingParametersChanged += ChangeVehiclePosition;
             gameSetup.ColorSchemeSet += SetColorScheme;
@@ -73,6 +77,29 @@ namespace VVR.Visuals
             vehicles[e.carIndex].speed += e.deltaSpeed;
         }
 
+        private bool positionChecker()// retruns true if every position was the same, otherwise false 
+        {
+            bool toReturn = true;
+            for(int i = 0; i < gameLogicReference.vehicles.Count; i++)
+            {
+                if (vehicles[i].positionY != gameLogicReference.vehicles[i].positionY)
+                {
+                    toReturn = false;
+                    vehicles[i].positionY = gameLogicReference.vehicles[i].positionY;
+                }
+                if (vehicles[i].positionX != gameLogicReference.vehicles[i].positionX)
+                {
+                    toReturn = false;
+                    vehicles[i].positionX = gameLogicReference.vehicles[i].positionX;
+                }
+                if (vehicles[i].speed != gameLogicReference.vehicles[i].speed)
+                {
+                    toReturn = false;
+                    vehicles[i].speed = gameLogicReference.vehicles[i].speed;
+                }
+            }
+            return toReturn;
+        }
         private void TechnicalMessageHandler(object? sender, TechnicalMessageEventArgs e)
         {
             if (e.message == GlobalConsts.GAME_FINISHED_MESSAGE)
@@ -124,8 +151,12 @@ namespace VVR.Visuals
         }
         private void RenderCar(char[,] frame, VehicleVisual car)// no parameters for now, but in future add position and car to find colors properties 
         {
-            int posX = (int)car.positionX; //not an issue because it is checked earlier
-            int posY = (int)car.positionOnFrameY; //not an issue because it is checked earlier
+            int posX = (int)car.positionX;
+            int posY;
+            if (car.positionOnFrameY != null)
+                posY = (int)car.positionOnFrameY;
+            else
+                throw new Exception($"one of the cars deosn't have posOnFrameY set");
 
             if (posY >= 0 && posY < GlobalConsts.TRACKFRAMELENGTH)
             {
@@ -330,7 +361,7 @@ namespace VVR.Visuals
                 PrintFrame(frame);
                 startingRow--;
                 if (startingRow < 0) startingRow = track.trackPieces.Count; // looping the straight track 
-
+                positionChecker();
                 WaitUntillTheFrameDurationPasses();
                
             }

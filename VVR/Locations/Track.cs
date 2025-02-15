@@ -10,7 +10,7 @@ namespace VVR.Locations
         //cars are travelling from the bottom to the the top, which means the last item in the list is crossed first after the game starts 
     {       
         float Condition { get; set; }//overall track condition, the lower the less grip a car has
-        bool isWet = false;
+        //bool isWet = false;
         int Width {get; set;}//how many cars can fit ar once side by side
         float length { get; } //track length
         string? name { get; }

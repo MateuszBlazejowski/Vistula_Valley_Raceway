@@ -18,17 +18,17 @@ namespace VVR.Vehicles
         public Tyres tyresBack;
 
         public bool isRaceFinished; 
-        public int startingPosition;
+        //public int startingPosition;
         public bool isHuman;
         public int positionX;
         public double positionY;
-        public int? positionOnFrameY;
+        public int positionOnFrameY;
         public int lapCounter;
         public double speed;
         public ConsoleColor bodyColor;
         public ConsoleColor roofTopColor;
 
-        public string id;
+        public string? id;
 
         public Vehicle(int cylamm, float disp, float _maxEngineSize, float _tireWearFront = 0.0f, TyreType _tireTypeFront = TyreType.Soft, float _tireWearBack = 0.0f, TyreType _tireTypeBack = TyreType.Soft, float _fuelTankSize = GlobalConsts.DEFAULTFUELTANK, float _currentFuel = GlobalConsts.DEFAULTFUELTANK, Configuration conf = Configuration.Inline, EngineType t = EngineType.NaturallyAspirated)
         {
@@ -60,7 +60,11 @@ namespace VVR.Vehicles
             speed = _speed;
             isRaceFinished = false;
             id = _id;
-            acceleration = _acceleration;   
+            acceleration = _acceleration;
+            engine = new Engine(1,1,Configuration.Inline, EngineType.Turbocharged);
+            frame = new Frame(12, 20, 20);
+            tyresFront = new Tyres(0, TyreType.Soft);
+            tyresBack = new Tyres(0, TyreType.Soft);
         }
 
         public void PrintVehicleInfo()
@@ -80,24 +84,5 @@ namespace VVR.Vehicles
 }
 
 
-/*
-            SAMPLE CAR
-            
-            Console.WriteLine("Sample Car:");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write('\'');
-            Console.BackgroundColor = ConsoleColor.DarkRed;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write('▄');//Console.Write('█');
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine('\'');
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write('\'');
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write("▀");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine('\'');
- */
 
 

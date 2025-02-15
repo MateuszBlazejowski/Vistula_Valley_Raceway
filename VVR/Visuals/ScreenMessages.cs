@@ -14,7 +14,7 @@ namespace VVR.Visuals
         {
             Console.Clear();
             Console.WriteLine("\n    Game Starts in ");
-            Console.WriteLine("\n\n\n    Hint: Use left and right arrow to move and esc to finish");
+            Console.WriteLine("\n\n\n    Hint: Use arrows to steer");
             for (int i = 3; i > 0; i--)
             {
                 Console.SetCursorPosition(19, 1);

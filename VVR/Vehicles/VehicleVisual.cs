@@ -15,11 +15,8 @@ namespace VVR.Vehicles
         public ConsoleColor roofTopColor;
         public int positionX;
         public double positionY;
-       // public int? positionOnFrameX; on frame needed because being on frame depends only on posY
-        public int? positionOnFrameY;
+        public int? positionOnFrameY; // on frame needed because being on frame depends only on posY
         public double speed;
-
-        static int botIndex = 0;
         public VehicleVisual(Vehicle car)//ConsoleColor _bodyColor, ConsoleColor _roofTopColor, bool _isHuman
         {
             bodyColor = car.bodyColor;
